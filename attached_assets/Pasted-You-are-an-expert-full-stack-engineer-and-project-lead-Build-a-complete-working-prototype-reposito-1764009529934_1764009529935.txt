@@ -1,0 +1,94 @@
+You are an expert full-stack engineer and project lead. Build a complete, working prototype repository for "DreamWave: A WebAR & AI-Driven Career Simulation Platform" (brief is in the file at /mnt/data/DreamWave Abstract.pdf — please read it first). Deliverables must be push-ready to a git repo and deployable. Follow these constraints and produce everything listed below.
+
+GOALS (priority order)
+1. A minimal, fully working web prototype (hosted) that runs the core loop:
+   - Quick 6-question quiz (rule-based scoring).
+   - InsightCard showing recommended career, score, salary/growth/stress estimates.
+   - WebAR preview via <model-viewer> using a GLB file in `public/models/`.
+   - A downloadable one-page Insight PDF (client-side generation is fine).
+2. Backend API endpoints (Node/Express or FastAPI) to:
+   - Serve the insight/download request (generate PDF server-side if preferred).
+   - Provide an optional ML inference endpoint (if included, accept quiz answers and return career probabilities). This can be a deterministic rule-based service initially.
+   - Authentication via Firebase Auth (email link or anonymous).
+3. Hosting & deployment:
+   - Frontend: Vercel or Firebase Hosting (prefer Vercel for easiest CI).
+   - Backend: Vercel Serverless Functions or Firebase Cloud Functions. If Flames cannot deploy, produce full deployment instructions and a deployable build.
+4. CI/CD:
+   - GitHub Actions workflow that builds, tests (basic checks), and deploys frontend and server.
+5. Documentation and assets:
+   - README with how to run locally, how to deploy, environment vars required.
+   - Include a small demo fallback video at `public/demo_fallback.mp4`.
+   - Include at least one lightweight GLB in `public/models/ux_tools.glb` (pick a free model). If licensing requires, include link and instructions to download.
+
+REPOSITORY STRUCTURE (exact)
+- / (root)
+  - README.md
+  - package.json
+  - .gitignore
+  - /frontend
+    - Vite React app (src/, public/)
+  - /backend
+    - server code (Node/Express or FastAPI)
+  - /infra
+    - github-actions workflow YAML
+    - firebase.json (if using Firebase)
+  - /assets
+    - /models/*.glb (include placeholder file)
+    - demo_fallback.mp4 (placeholder)
+
+SPECIFIC TECH STACK (must follow)
+- Frontend: React (Vite), plain CSS, uses `<model-viewer>` for WebAR: import via unpkg or NPM `@google/model-viewer`.
+- Backend: Node.js + Express (or FastAPI if preferred) with endpoints:
+  - `POST /api/match` — accepts quiz answers, returns career match + raw scores.
+  - `POST /api/report` — accepts result, returns PDF (or pre-generated PDF URL).
+- Auth & DB: Firebase Auth (email or anonymous) + Firestore / Supabase optional for saving anonymous usage events.
+- ML: For Round-2 demo, a rule-based matching engine is acceptable. If you add TF.js model, include training script and model.json in repo.
+
+SECURITY & CONFIG
+- Use environment variables for secrets (`.env.example` in repo).
+- Never embed real Firebase service account keys into repo. Instead output exactly how to add them to GitHub secrets.
+
+DEVELOPMENT STEPS & COMMANDS (exact to run)
+1. Initialize git repo and create work branches:
+   - `git init`
+   - `git checkout -b main`
+2. Frontend scaffold (inside /frontend):
+   - `npm create vite@latest frontend -- --template react`
+   - `cd frontend`
+   - `npm install`
+   - `npm install @google/model-viewer`
+3. Add provided React components (Quiz, InsightCard, ARPreview) in `/frontend/src/components` following the sample in the task brief.
+4. Backend scaffold (inside /backend):
+   - `mkdir backend && cd backend`
+   - `npm init -y`
+   - `npm install express cors body-parser firebase-admin`
+   - Create `index.js` with endpoints `POST /api/match` and `POST /api/report`.
+5. Local run commands:
+   - Frontend dev: `cd frontend && npm run dev`
+   - Backend dev: `cd backend && node index.js`
+6. Build & Deploy:
+   - Frontend build: `cd frontend && npm run build`
+   - Deploy to Vercel: `vercel --prod` OR Firebase hosting:
+     - `firebase login`
+     - `firebase init hosting functions` (follow prompts)
+     - `npm run build` then `firebase deploy --only hosting`
+7. CI: create GitHub Actions workflow `infra/deploy.yml` that runs `npm ci`, `npm run build` and triggers Vercel/Firebase deploy on push to main.
+
+TESTING & QA
+- Add a smoke test script to assert the frontend loads and `/api/match` returns expected JSON for a sample payload.
+- Create `demo_fallback.mp4` inside frontend/public and ensure it plays.
+
+OUTPUTS I expect you to produce in the repo:
+1. Full source code for frontend and backend.
+2. `README.md` with local run and deploy instructions + how to set environment variables and GitHub Secrets.
+3. `infra/deploy.yml` for GitHub Actions.
+4. A demo URL after successful deploy OR explicit deploy instructions if Flames cannot deploy itself.
+5. A zip download link or GitHub repo URL containing the final project.
+
+PLEASE: After generating files, run linters and build commands, capture the build logs, and include them in a file `BUILD_LOGS.txt`. If any errors occur, fix them and re-run until the build completes successfully.
+
+EXTRA: Use the uploaded design brief at `/mnt/data/DreamWave Abstract.pdf` to fill README, about page content, and to name the project.
+
+If anything is unclear, make a best-effort decision (prefer simplicity and clarity), implement it, and explain your assumption in README.
+
+Deliver the GitHub repo URL or a zipped archive of the repo. Also provide the exact commands I must run locally to test and to deploy, and the exact values to put into GitHub Secrets for deployment (names and descriptions). Thank you.
