@@ -10,10 +10,15 @@ DreamWeave empowers students to make informed, confident decisions, reduces the 
 
 ## 3.	Proposed Tech Stack
 Frontend: React.js, Tailwind CSS
+
 WebAR Layer: AR.js / model-viewer (GLB rendering)
+
 Backend: Node.js / FastAPI
+
 Database + Auth: Firebase / Supabase
+
 ML Engine: scikit-learn (Logistic Regression, Random Forest)
+
 This stack is chosen for speed, stability, and easy cross-device access.
 
 
