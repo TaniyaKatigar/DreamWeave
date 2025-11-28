@@ -11,6 +11,8 @@ import Results from "@/pages/results";
 import CareerDetail from "@/pages/career-detail";
 import ARPreview from "@/pages/ar-preview";
 import BrowseCareers from "@/pages/browse-careers";
+import Dashboard from "@/pages/dashboard";
+import History from "@/pages/history";
 import NotFound from "@/pages/not-found";
 
 // Protected route wrapper
@@ -45,6 +47,12 @@ function Router() {
       </Route>
       <Route path="/results">
         <ProtectedRoute component={Results} />
+      </Route>
+      <Route path="/dashboard">
+        <ProtectedRoute component={Dashboard} />
+      </Route>
+      <Route path="/history">
+        <ProtectedRoute component={History} />
       </Route>
       <Route path="/career-detail">
         <ProtectedRoute component={CareerDetail} />

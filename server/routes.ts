@@ -303,6 +303,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Track career exploration
+  app.post("/api/track-career-exploration", async (req, res) => {
+    try {
+      const { userId, careerTitle } = req.body;
+      
+      if (!userId || !careerTitle) {
+        return res.status(400).json({ error: "Missing userId or careerTitle" });
+      }
+
+      await storage.trackCareerExploration(userId, careerTitle);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error in /api/track-career-exploration:", error);
+      res.status(400).json({ error: "Failed to track exploration" });
+    }
+  });
+
+  // Track AR preview
+  app.post("/api/track-ar-preview", async (req, res) => {
+    try {
+      const { userId, careerTitle } = req.body;
+      
+      if (!userId || !careerTitle) {
+        return res.status(400).json({ error: "Missing userId or careerTitle" });
+      }
+
+      await storage.trackARPreview(userId, careerTitle);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error in /api/track-ar-preview:", error);
+      res.status(400).json({ error: "Failed to track AR preview" });
+    }
+  });
+
+  // Get platform metrics
+  app.get("/api/platform-metrics", async (req, res) => {
+    try {
+      const metrics = await storage.getPlatformMetrics();
+      res.json(metrics);
+    } catch (error) {
+      console.error("Error in /api/platform-metrics:", error);
+      res.status(400).json({ error: "Failed to fetch metrics" });
+    }
+  });
+
   // PDF report generation endpoint
   app.post("/api/report", async (req, res) => {
     try {

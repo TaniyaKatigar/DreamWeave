@@ -5,6 +5,7 @@ import { ArrowRight, Sparkles, Brain, Eye, TrendingUp, Users, Award, BarChart3, 
 import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/hooks/use-toast";
+import { ProfileDropdown } from "@/components/profile-dropdown";
 import heroImage from "@assets/generated_images/hero_section_ar_student_illustration.png";
 import arDemoImage from "@assets/generated_images/ar_demo_interface_mockup.png";
 import student1 from "@assets/generated_images/student_testimonial_portrait_1.png";
@@ -100,19 +101,10 @@ export default function Landing() {
             </a>
             {user ? (
               <>
-                <Button variant="outline" size="sm" onClick={() => setLocation("/quiz")} data-testid="button-quiz-nav">
-                  Take Quiz
+                <Button variant="outline" size="sm" onClick={() => setLocation("/dashboard")} data-testid="button-dashboard-nav">
+                  Dashboard
                 </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={handleSignOut}
-                  className="flex items-center gap-2"
-                  data-testid="button-signout-nav"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Sign Out
-                </Button>
+                <ProfileDropdown />
               </>
             ) : (
               <Button variant="outline" size="sm" onClick={() => setLocation("/login")} data-testid="button-signin-nav">

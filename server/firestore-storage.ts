@@ -8,6 +8,8 @@ import {
   where,
   addDoc,
   Timestamp,
+  updateDoc,
+  increment,
 } from "firebase/firestore";
 import { db } from "../client/src/lib/firebase";
 import { type User, type InsertUser, type Assessment, type InsertAssessment } from "@shared/schema";
@@ -135,6 +137,58 @@ export class FirestoreStorage {
     } catch (error) {
       console.error("Error creating assessment:", error);
       throw error;
+    }
+  }
+
+  async trackCareerExploration(userId: string, careerTitle: string): Promise<void> {
+    try {
+      const explorationData = {
+        userId,
+        careerTitle,
+        timestamp: Timestamp.now(),
+      };
+      await addDoc(collection(db, "careerExplorations"), explorationData);
+    } catch (error) {
+      console.error("Error tracking career exploration:", error);
+    }
+  }
+
+  async trackARPreview(userId: string, careerTitle: string): Promise<void> {
+    try {
+      const arData = {
+        userId,
+        careerTitle,
+        timestamp: Timestamp.now(),
+      };
+      await addDoc(collection(db, "arPreviews"), arData);
+    } catch (error) {
+      console.error("Error tracking AR preview:", error);
+    }
+  }
+
+  async getPlatformMetrics(): Promise<any> {
+    try {
+      const assessmentsSnapshot = await getDocs(collection(db, "assessments"));
+      const explorationsSnapshot = await getDocs(collection(db, "careerExplorations"));
+      const arPreviewsSnapshot = await getDocs(collection(db, "arPreviews"));
+      
+      const assessments = assessmentsSnapshot.docs.map(doc => doc.data());
+      const averageScore = assessments.length > 0 
+        ? Math.round(assessments.reduce((sum, a) => sum + a.matchScore, 0) / assessments.length)
+        : 0;
+
+      const uniqueCareers = new Set(explorationsSnapshot.docs.map(doc => doc.data().careerTitle)).size;
+
+      return {
+        studentsHelped: assessmentsSnapshot.size,
+        careersExplored: uniqueCareers,
+        arPreviewsCompleted: arPreviewsSnapshot.size,
+        averageMatchScore: averageScore,
+        lastUpdated: new Date(),
+      };
+    } catch (error) {
+      console.error("Error getting platform metrics:", error);
+      return { studentsHelped: 0, careersExplored: 0, arPreviewsCompleted: 0, averageMatchScore: 0 };
     }
   }
 }

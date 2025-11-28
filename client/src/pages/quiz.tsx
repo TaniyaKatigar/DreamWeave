@@ -62,11 +62,12 @@ export default function Quiz() {
     setAnswers(newAnswers);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!selectedOption) return;
 
     if (isLastQuestion) {
       sessionStorage.setItem("quizAnswers", JSON.stringify(answers));
+      // Redirect to results page to show match results
       setLocation("/results");
     } else {
       setCurrentQuestion(currentQuestion + 1);
