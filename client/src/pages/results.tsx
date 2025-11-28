@@ -85,8 +85,21 @@ export default function Results() {
   const topMatch = matchResults.topMatches[0];
   const career = topMatch.career;
 
+  // Validate and extract salary range properly
+  const validateSalaryRange = (range: any) => {
+    if (range?.min && range?.max) {
+      const min = typeof range.min === 'number' ? range.min : parseInt(range.min, 10);
+      const max = typeof range.max === 'number' ? range.max : parseInt(range.max, 10);
+      if (!isNaN(min) && !isNaN(max)) {
+        return { min, max };
+      }
+    }
+    return null;
+  };
+
   // Use Gemini metrics if available, otherwise use career data
-  const salaryRange = metricsData?.salaryRange || career.salaryRange;
+  const validGeminiRange = validateSalaryRange(metricsData?.salaryRange);
+  const salaryRange = validGeminiRange || career.salaryRange;
   const growthPotential = metricsData?.growthPotential || career.growthPotential;
   const stressIndex = metricsData?.stressIndex || career.stressIndex;
   const mismatchProbability = metricsData?.mismatchProbability || career.mismatchProbability;
