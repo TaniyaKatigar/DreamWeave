@@ -9,6 +9,14 @@ import { useAuth } from "@/lib/auth-context";
 import { formatSalary } from "@/lib/careerData";
 import { useRealtimeCareers } from "@/lib/useRealtimeCareers";
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'model-viewer': any;
+    }
+  }
+}
+
 export default function Dashboard() {
   const [, setLocation] = useLocation();
   const { data: careers = [], isLoading: careersLoading } = useRealtimeCareers();
@@ -63,6 +71,17 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
+              {selectedCareer.workspace3dModel && (
+                <div className="w-full h-80 bg-muted rounded-lg overflow-hidden border border-border">
+                  <model-viewer
+                    src={selectedCareer.workspace3dModel}
+                    alt={`${selectedCareer.title} Workspace`}
+                    auto-rotate
+                    camera-controls
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                </div>
+              )}
               <p className="text-lg text-muted-foreground">{selectedCareer.description}</p>
 
               {/* Metrics */}
@@ -169,15 +188,26 @@ export default function Dashboard() {
           {careers.map((career) => (
             <Card 
               key={career.id} 
-              className="hover-elevate cursor-pointer transition-all"
+              className="hover-elevate cursor-pointer transition-all overflow-hidden flex flex-col"
               onClick={() => setSelectedCareer(career)}
               data-testid={`card-career-${career.id}`}
             >
+              {career.workspace3dModel && (
+                <div className="w-full h-48 bg-muted border-b border-border overflow-hidden">
+                  <model-viewer
+                    src={career.workspace3dModel}
+                    alt={`${career.title} Workspace`}
+                    auto-rotate
+                    camera-controls
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                </div>
+              )}
               <CardHeader>
                 <CardTitle className="text-xl">{career.title}</CardTitle>
                 <Badge className="w-fit">{career.category}</Badge>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 flex-1 flex flex-col">
                 <p className="text-sm text-muted-foreground line-clamp-2">{career.description}</p>
                 
                 <div className="space-y-2">
@@ -193,7 +223,7 @@ export default function Dashboard() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full"
+                  className="w-full mt-auto"
                   data-testid={`button-explore-${career.id}`}
                 >
                   Explore <ArrowRight className="ml-2 w-3 h-3" />

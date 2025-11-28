@@ -80,6 +80,7 @@ export interface Career {
   arModelPath?: string;
   videoFallbackPath?: string;
   industryTrends: string;
+  workspace3dModel?: string;
 }
 
 // Career match result
