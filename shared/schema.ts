@@ -67,6 +67,7 @@ export interface Career {
   title: string;
   description: string;
   category: string;
+  image?: string;
   salaryRange: {
     min: number;
     max: number;

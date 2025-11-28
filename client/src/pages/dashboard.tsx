@@ -71,14 +71,12 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              {selectedCareer.workspace3dModel && (
-                <div className="w-full h-80 bg-muted rounded-lg overflow-hidden border border-border">
-                  <model-viewer
-                    src={selectedCareer.workspace3dModel}
-                    alt={`${selectedCareer.title} Workspace`}
-                    auto-rotate
-                    camera-controls
-                    style={{ width: '100%', height: '100%' }}
+              {selectedCareer.image && (
+                <div className="w-full h-96 bg-muted rounded-lg overflow-hidden border border-border">
+                  <img 
+                    src={selectedCareer.image} 
+                    alt={selectedCareer.title}
+                    className="w-full h-full object-cover"
                   />
                 </div>
               )}
@@ -192,14 +190,12 @@ export default function Dashboard() {
               onClick={() => setSelectedCareer(career)}
               data-testid={`card-career-${career.id}`}
             >
-              {career.workspace3dModel && (
-                <div className="w-full h-48 bg-muted border-b border-border overflow-hidden">
-                  <model-viewer
-                    src={career.workspace3dModel}
-                    alt={`${career.title} Workspace`}
-                    auto-rotate
-                    camera-controls
-                    style={{ width: '100%', height: '100%' }}
+              {career.image && (
+                <div className="w-full h-40 bg-muted overflow-hidden">
+                  <img 
+                    src={career.image} 
+                    alt={career.title}
+                    className="w-full h-full object-cover"
                   />
                 </div>
               )}
