@@ -1,15 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, Brain, Eye, TrendingUp, Users, Award, BarChart3, LogOut, Headphones } from "lucide-react";
+import { ArrowRight, Sparkles, Brain, Eye, TrendingUp, Award, LogOut, Headphones } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import heroImage from "@assets/generated_images/hero_section_ar_student_illustration.png";
 import arDemoImage from "@assets/generated_images/ar_demo_interface_mockup.png";
-import student1 from "@assets/generated_images/student_testimonial_portrait_1.png";
-import student2 from "@assets/generated_images/student_testimonial_portrait_2.png";
 
 export default function Landing() {
   const [, setLocation] = useLocation();
@@ -50,36 +48,12 @@ export default function Landing() {
       description: "Get insights on salary ranges, growth potential, stress levels, and industry trends for each career.",
     },
     {
-      icon: BarChart3,
-      title: "Career Library",
-      description: "Explore detailed profiles of 50+ careers across technology, healthcare, design, business, and more.",
-    },
-    {
       icon: Award,
       title: "Personalized Reports",
       description: "Download comprehensive PDF reports with your match breakdown and recommended next steps.",
     },
-    {
-      icon: Users,
-      title: "Expert Insights",
-      description: "Access curated career data validated by industry professionals and career counselors.",
-    },
   ];
 
-  const testimonials = [
-    {
-      name: "Priya Sharma",
-      school: "Delhi University",
-      quote: "DreamWeave helped me visualize what being a UX designer actually looks like. The AR preview was amazing!",
-      image: student1,
-    },
-    {
-      name: "Rahul Mehta",
-      school: "IIT Bombay",
-      quote: "I was torn between software engineering and data science. The AI matching gave me clarity I needed.",
-      image: student2,
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -95,9 +69,6 @@ export default function Landing() {
             </a>
             <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Features
-            </a>
-            <a href="#testimonials" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Testimonials
             </a>
             {user ? (
               <>
@@ -119,9 +90,6 @@ export default function Landing() {
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
-              <Badge variant="outline" className="text-sm">
-                Trusted by 10,000+ Students
-              </Badge>
               <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
                 Experience Your Future Career
               </h1>
@@ -307,56 +275,6 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-muted/30">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            {[
-              { value: "10,000+", label: "Students Helped" },
-              { value: "50+", label: "Careers Explored" },
-              { value: "25,000+", label: "AR Previews Completed" },
-              { value: "92%", label: "Average Match Score" },
-            ].map((metric, idx) => (
-              <div key={idx} className="space-y-2">
-                <div className="text-4xl md:text-5xl font-bold text-primary">{metric.value}</div>
-                <div className="text-sm text-muted-foreground">{metric.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="testimonials" className="py-16 md:py-20">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-4xl font-semibold">Student Success Stories</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Hear from students who found their path with DreamWeave
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8">
-            {testimonials.map((testimonial, idx) => (
-              <Card key={idx} className="p-8">
-                <CardContent className="p-0 space-y-6">
-                  <p className="text-lg leading-relaxed text-muted-foreground italic">
-                    "{testimonial.quote}"
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <img 
-                      src={testimonial.image} 
-                      alt={testimonial.name} 
-                      className="w-20 h-20 rounded-full object-cover"
-                    />
-                    <div>
-                      <div className="font-semibold">{testimonial.name}</div>
-                      <div className="text-sm text-muted-foreground">{testimonial.school}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <section className="py-24 bg-primary text-primary-foreground">
         <div className="container mx-auto px-6 max-w-4xl text-center space-y-8">
@@ -379,35 +297,15 @@ export default function Landing() {
       </section>
 
       <footer className="border-t py-12">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid md:grid-cols-3 gap-12">
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-6 w-6 text-primary" />
-                <span className="text-xl font-bold">DreamWeave</span>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Transforming career counseling with immersive WebAR technology and AI-powered insights.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Careers Library</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Terms of Service</a></li>
-              </ul>
-            </div>
+        <div className="container mx-auto px-6 max-w-7xl text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Sparkles className="h-6 w-6 text-primary" />
+            <span className="text-xl font-bold">DreamWeave</span>
           </div>
-          <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-8">
+            Transforming career counseling with immersive WebAR technology and AI-powered insights.
+          </p>
+          <div className="text-sm text-muted-foreground">
             © 2025 DreamWeave. All rights reserved.
           </div>
         </div>
