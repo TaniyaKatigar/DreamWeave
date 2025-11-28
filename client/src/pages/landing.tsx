@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, Brain, Eye, TrendingUp, Users, Award, BarChart3 } from "lucide-react";
+import { ArrowRight, Sparkles, Brain, Eye, TrendingUp, Users, Award, BarChart3, LogOut } from "lucide-react";
 import { useLocation } from "wouter";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { useAuth } from "@/lib/auth-context";
+import { useToast } from "@/hooks/use-toast";
 import heroImage from "@assets/generated_images/hero_section_ar_student_illustration.png";
 import arDemoImage from "@assets/generated_images/ar_demo_interface_mockup.png";
 import student1 from "@assets/generated_images/student_testimonial_portrait_1.png";
@@ -11,6 +12,8 @@ import student2 from "@assets/generated_images/student_testimonial_portrait_2.pn
 
 export default function Landing() {
   const [, setLocation] = useLocation();
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
 
   const features = [
     {
@@ -78,10 +81,26 @@ export default function Landing() {
             <a href="#testimonials" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Testimonials
             </a>
-            <Button variant="outline" size="sm" onClick={() => setLocation("/quiz")}>
-              Take Quiz
-            </Button>
-            <ThemeToggle />
+            {user ? (
+              <>
+                <Button variant="outline" size="sm" onClick={() => setLocation("/quiz")} data-testid="button-quiz-nav">
+                  Take Quiz
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="flex items-center gap-2"
+                  data-testid="button-signout-nav"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <Button variant="outline" size="sm" onClick={() => setLocation("/login")} data-testid="button-signin-nav">
+                Sign In
+              </Button>
+            )}
           </nav>
         </div>
       </header>
@@ -174,7 +193,7 @@ export default function Landing() {
                 provide no insight into <strong className="text-foreground">future outcomes</strong>.
               </p>
               <p>
-                DreamWave bridges this gap with immersive AR previews and predictive AI matching.
+                DreamWeave bridges this gap with immersive AR previews and predictive AI matching.
               </p>
             </div>
           </div>
@@ -299,7 +318,7 @@ export default function Landing() {
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-semibold">Student Success Stories</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Hear from students who found their path with DreamWave
+              Hear from students who found their path with DreamWeave
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
@@ -331,7 +350,7 @@ export default function Landing() {
         <div className="container mx-auto px-6 max-w-4xl text-center space-y-8">
           <h2 className="text-3xl md:text-5xl font-bold">Ready to discover your ideal career?</h2>
           <p className="text-lg md:text-xl opacity-90">
-            Join thousands of students making informed career decisions with DreamWave
+            Join thousands of students making informed career decisions with DreamWeave
           </p>
           <Button 
             size="lg" 
@@ -353,7 +372,7 @@ export default function Landing() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-6 w-6 text-primary" />
-                <span className="text-xl font-bold">DreamWave</span>
+                <span className="text-xl font-bold">DreamWeave</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Transforming career counseling with immersive WebAR technology and AI-powered insights.
@@ -377,7 +396,7 @@ export default function Landing() {
             </div>
           </div>
           <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-            © 2025 DreamWave. All rights reserved.
+            © 2025 DreamWeave. All rights reserved.
           </div>
         </div>
       </footer>

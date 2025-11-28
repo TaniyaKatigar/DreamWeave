@@ -107,7 +107,7 @@ export default function Results() {
         <div className="container mx-auto flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">DreamWave</span>
+            <span className="text-xl font-bold">DreamWeave</span>
           </div>
           <Button variant="ghost" onClick={() => setLocation("/")} data-testid="button-home">
             Home
