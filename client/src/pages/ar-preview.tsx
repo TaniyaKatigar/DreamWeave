@@ -47,6 +47,10 @@ export default function ARPreview() {
     );
   }
 
+  const handleBack = () => {
+    setLocation(-1 as any);
+  };
+
   const careerContextPoints: Record<string, string[]> = {
     "Software Engineer": [
       "Use keyboard and mouse to write and test code",

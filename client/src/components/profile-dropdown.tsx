@@ -11,13 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function ProfileDropdown() {
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
   const [, setLocation] = useLocation();
 
   if (!user) return null;
 
   const handleSignOut = async () => {
-    await logout();
+    await signOut();
     setLocation("/");
   };
 
