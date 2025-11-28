@@ -1,27 +1,47 @@
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 import { type User, type InsertUser, type Assessment, type InsertAssessment } from "@shared/schema";
 
 // Initialize Firebase Admin
-let adminApp: admin.app.App | null = null;
 let adminDb: admin.firestore.Firestore | null = null;
 
-try {
-  const serviceAccountJson = process.env.FIREBASE_ADMIN_SDK_JSON;
-  if (serviceAccountJson) {
+function initializeFirebaseAdmin() {
+  try {
+    const serviceAccountJson = process.env.FIREBASE_ADMIN_SDK_JSON;
+    
+    if (!serviceAccountJson) {
+      console.warn("FIREBASE_ADMIN_SDK_JSON environment variable not set");
+      return false;
+    }
+
     const serviceAccount = JSON.parse(serviceAccountJson);
-    adminApp = admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
+    console.log("Parsed service account, initializing Firebase Admin SDK");
+
+    // Check if already initialized
+    if (admin.apps.length === 0) {
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        projectId: serviceAccount.project_id,
+      });
+    }
+
     adminDb = admin.firestore();
-    console.log("Firebase Admin initialized successfully");
+    console.log("✅ Firebase Admin SDK initialized successfully");
+    return true;
+  } catch (error) {
+    console.error("❌ Firebase Admin initialization failed:", error);
+    return false;
   }
-} catch (error) {
-  console.warn("Firebase Admin initialization failed:", error);
 }
+
+// Initialize on module load
+initializeFirebaseAdmin();
 
 export class FirestoreAdminStorage {
   async getUser(id: string): Promise<User | undefined> {
-    if (!adminDb) return undefined;
+    if (!adminDb) {
+      console.warn("Firestore not initialized");
+      return undefined;
+    }
     try {
       const userDoc = await adminDb.collection("users").doc(id).get();
       if (userDoc.exists) {
@@ -44,7 +64,11 @@ export class FirestoreAdminStorage {
   async getUserByFirebaseUid(firebaseUid: string): Promise<User | undefined> {
     if (!adminDb) return undefined;
     try {
-      const snapshot = await adminDb.collection("users").where("firebaseUid", "==", firebaseUid).limit(1).get();
+      const snapshot = await adminDb
+        .collection("users")
+        .where("firebaseUid", "==", firebaseUid)
+        .limit(1)
+        .get();
       if (!snapshot.empty) {
         const doc = snapshot.docs[0];
         const data = doc.data();
@@ -64,7 +88,7 @@ export class FirestoreAdminStorage {
   }
 
   async createUser(user: InsertUser): Promise<User> {
-    if (!adminDb) throw new Error("Firebase Admin not initialized");
+    if (!adminDb) throw new Error("Firestore not initialized");
     try {
       const userData = {
         email: user.email ?? null,
@@ -74,6 +98,7 @@ export class FirestoreAdminStorage {
         createdAt: admin.firestore.Timestamp.now(),
       };
       const userRef = await adminDb.collection("users").add(userData);
+      console.log("✅ User created in Firestore:", userRef.id);
       return {
         id: userRef.id,
         ...userData,
@@ -109,8 +134,12 @@ export class FirestoreAdminStorage {
   async getAssessmentsByUserId(userId: string): Promise<Assessment[]> {
     if (!adminDb) return [];
     try {
-      const snapshot = await adminDb.collection("assessments").where("userId", "==", userId).get();
-      return snapshot.docs.map((doc) => {
+      const snapshot = await adminDb
+        .collection("assessments")
+        .where("userId", "==", userId)
+        .get();
+      
+      const assessments = snapshot.docs.map((doc) => {
         const data = doc.data();
         return {
           id: doc.id,
@@ -121,6 +150,11 @@ export class FirestoreAdminStorage {
           createdAt: data.createdAt?.toDate() ?? new Date(),
         };
       });
+      
+      if (assessments.length > 0) {
+        console.log(`✅ Retrieved ${assessments.length} assessment(s) for user ${userId}`);
+      }
+      return assessments;
     } catch (error) {
       console.error("Error getting assessments:", error);
       return [];
@@ -128,7 +162,7 @@ export class FirestoreAdminStorage {
   }
 
   async createAssessment(assessment: InsertAssessment): Promise<Assessment> {
-    if (!adminDb) throw new Error("Firebase Admin not initialized");
+    if (!adminDb) throw new Error("Firestore not initialized");
     try {
       const assessmentData = {
         userId: assessment.userId ?? null,
@@ -137,14 +171,17 @@ export class FirestoreAdminStorage {
         matchScore: assessment.matchScore,
         createdAt: admin.firestore.Timestamp.now(),
       };
+      
       const assessmentRef = await adminDb.collection("assessments").add(assessmentData);
+      console.log("✅ Assessment saved to Firestore:", assessmentRef.id, "for user:", assessment.userId);
+      
       return {
         id: assessmentRef.id,
         ...assessmentData,
         createdAt: new Date(),
       };
     } catch (error) {
-      console.error("Error creating assessment:", error);
+      console.error("❌ Error creating assessment:", error);
       throw error;
     }
   }
@@ -158,6 +195,7 @@ export class FirestoreAdminStorage {
         timestamp: admin.firestore.Timestamp.now(),
       };
       await adminDb.collection("careerExplorations").add(explorationData);
+      console.log(`✅ Tracked career exploration: ${careerTitle}`);
     } catch (error) {
       console.error("Error tracking career exploration:", error);
     }
@@ -172,6 +210,7 @@ export class FirestoreAdminStorage {
         timestamp: admin.firestore.Timestamp.now(),
       };
       await adminDb.collection("arPreviews").add(arData);
+      console.log(`✅ Tracked AR preview: ${careerTitle}`);
     } catch (error) {
       console.error("Error tracking AR preview:", error);
     }
@@ -179,7 +218,12 @@ export class FirestoreAdminStorage {
 
   async getPlatformMetrics(): Promise<any> {
     if (!adminDb) {
-      return { studentsHelped: 0, careersExplored: 0, arPreviewsCompleted: 0, averageMatchScore: 0 };
+      return {
+        studentsHelped: 0,
+        careersExplored: 0,
+        arPreviewsCompleted: 0,
+        averageMatchScore: 0,
+      };
     }
     try {
       const assessmentsSnapshot = await adminDb.collection("assessments").get();
@@ -192,18 +236,28 @@ export class FirestoreAdminStorage {
           ? Math.round(assessments.reduce((sum, a) => sum + a.matchScore, 0) / assessments.length)
           : 0;
 
-      const uniqueCareers = new Set(explorationsSnapshot.docs.map((doc) => doc.data().careerTitle)).size;
+      const uniqueCareers = new Set(
+        explorationsSnapshot.docs.map((doc) => doc.data().careerTitle)
+      ).size;
 
-      return {
+      const metrics = {
         studentsHelped: assessmentsSnapshot.size,
         careersExplored: uniqueCareers,
         arPreviewsCompleted: arPreviewsSnapshot.size,
         averageMatchScore: averageScore,
         lastUpdated: new Date(),
       };
+
+      console.log("📊 Platform Metrics:", metrics);
+      return metrics;
     } catch (error) {
       console.error("Error getting platform metrics:", error);
-      return { studentsHelped: 0, careersExplored: 0, arPreviewsCompleted: 0, averageMatchScore: 0 };
+      return {
+        studentsHelped: 0,
+        careersExplored: 0,
+        arPreviewsCompleted: 0,
+        averageMatchScore: 0,
+      };
     }
   }
 }

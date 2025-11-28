@@ -100,17 +100,6 @@ export class MemStorage implements IStorage {
 }
 
 // Use Firebase Admin Firestore first, then fall back to in-memory
-let storage: IStorage;
-try {
-  if (process.env.FIREBASE_ADMIN_SDK_JSON) {
-    storage = firestoreAdminStorage;
-  } else {
-    console.warn("FIREBASE_ADMIN_SDK_JSON not set, using in-memory storage");
-    storage = new MemStorage();
-  }
-} catch (error) {
-  console.warn("Firebase Admin not available, using in-memory storage:", error);
-  storage = new MemStorage();
-}
+const storage: IStorage = firestoreAdminStorage;
 
 export { storage };
