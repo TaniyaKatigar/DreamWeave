@@ -89,7 +89,7 @@ export default function Landing() {
 
       <section className="relative overflow-hidden py-20 md:py-32">
         <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
             <div className="space-y-8">
               <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
                 Experience Your Future Career
@@ -123,14 +123,31 @@ export default function Landing() {
                 Free • No credit card • 6-minute quiz
               </p>
             </div>
-            <div className="relative h-96 rounded-2xl overflow-hidden flex items-center justify-center">
-              <div className="absolute w-full h-full">
+            <div className="w-full flex flex-col gap-4">
+              <div className="relative w-full h-96 rounded-2xl overflow-hidden" style={{ '--spline-hide-attribution': 'true' } as any}>
                 <Spline scene="https://prod.spline.design/A4PVuTD66H0Yoe3b/scene.splinecode" />
               </div>
+              <img 
+                src={heroImage} 
+                alt="Student experiencing AR career preview" 
+                className="w-full h-auto rounded-2xl"
+              />
             </div>
           </div>
         </div>
       </section>
+      
+      <style>{`
+        iframe[title*="Spline"] {
+          border: none !important;
+        }
+        .spline-container {
+          display: none !important;
+        }
+        .spline-attribution {
+          display: none !important;
+        }
+      `}</style>
 
       <section className="py-16 md:py-20 bg-muted/30">
         <div className="container mx-auto px-6 max-w-7xl">
