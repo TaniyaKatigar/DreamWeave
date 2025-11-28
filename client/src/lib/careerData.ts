@@ -255,7 +255,7 @@ export const careers: Career[] = [
     title: "Teacher",
     description: "Inspire and educate the next generation by sharing knowledge and fostering critical thinking.",
     category: "Education",
-    image: "https://images.unsplash.com/photo-1564429238928-48a7d835285c?w=500&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1427504494785-cdaa41d4f869?w=500&h=300&fit=crop",
     salaryRange: { min: 350000, max: 900000, currency: "INR" },
     growthPotential: 65,
     stressIndex: 71,
