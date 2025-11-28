@@ -302,12 +302,9 @@ export default function Landing() {
             <Sparkles className="h-6 w-6 text-primary" />
             <span className="text-xl font-bold">DreamWeave</span>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-8">
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             Transforming career counseling with immersive WebAR technology and AI-powered insights.
           </p>
-          <div className="text-sm text-muted-foreground">
-            © 2025 DreamWeave. All rights reserved.
-          </div>
         </div>
       </footer>
     </div>
