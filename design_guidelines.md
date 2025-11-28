@@ -1,4 +1,4 @@
-# DreamWave Design Guidelines
+# DreamWeave Design Guidelines
 
 ## Design Approach
 **Reference-Based:** Drawing inspiration from Linear (clean interactions), Notion (information hierarchy), and modern EdTech platforms like Coursera. Focus on clarity, trust-building, and seamless AR integration.
@@ -140,7 +140,7 @@
 - Match breakdown: Horizontal bar charts for different criteria
 - Future projections: Timeline graphic
 - Recommended next steps: Bullet list
-- Footer: "Generated via DreamWave • [Date]"
+- Footer: "Generated via DreamWeave • [Date]"
 
 ---
 

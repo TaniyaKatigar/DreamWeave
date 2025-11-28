@@ -49,7 +49,7 @@ export default function Landing() {
     {
       name: "Priya Sharma",
       school: "Delhi University",
-      quote: "DreamWave helped me visualize what being a UX designer actually looks like. The AR preview was amazing!",
+      quote: "DreamWeave helped me visualize what being a UX designer actually looks like. The AR preview was amazing!",
       image: student1,
     },
     {
@@ -66,7 +66,7 @@ export default function Landing() {
         <div className="container mx-auto flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">DreamWave</span>
+            <span className="text-xl font-bold">DreamWeave</span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
             <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">

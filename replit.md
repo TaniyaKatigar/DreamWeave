@@ -1,8 +1,8 @@
-# DreamWave - WebAR Career Simulation Platform
+# DreamWeave - WebAR Career Simulation Platform
 
 ## Overview
 
-DreamWave is an AI-powered career guidance platform that helps students discover their ideal career path through interactive quizzes, personalized career matching, and immersive WebAR workplace previews. The platform combines a React frontend with an Express backend to deliver career recommendations based on personality, skills, and interests.
+DreamWeave is an AI-powered career guidance platform that helps students discover their ideal career path through interactive quizzes, personalized career matching, and immersive WebAR workplace previews. The platform combines a React frontend with an Express backend to deliver career recommendations based on personality, skills, and interests.
 
 ## User Preferences
 
