@@ -101,6 +101,11 @@ export default function Results() {
     setLocation("/ar-preview");
   };
 
+  const handleTryCareer = (matchResult: typeof topMatch) => {
+    sessionStorage.setItem("selectedCareerMatch", JSON.stringify(matchResult));
+    setLocation("/career-detail");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="w-full border-b bg-background sticky top-0 z-10">

@@ -1,17 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
 import { useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { quizQuestions } from "@/lib/careerData";
-import type { QuizAnswer } from "@shared/schema";
+import { useAuth } from "@/lib/auth-context";
+import type { QuizAnswer, Assessment } from "@shared/schema";
 
 export default function Quiz() {
   const [, setLocation] = useLocation();
+  const { user } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  // Check if user already completed the quiz
+  const { data: userAssessment, isLoading } = useQuery<Assessment>({
+    queryKey: ["/api/user-assessment", user?.uid],
+    enabled: !!user?.uid,
+    queryFn: async () => {
+      const res = await fetch(`/api/user-assessment?userId=${user?.uid}`, {
+        credentials: "include",
+      });
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error("Failed to fetch assessment");
+      return await res.json();
+    },
+  });
+
+  useEffect(() => {
+    if (userAssessment) {
+      setLocation("/results");
+    }
+  }, [userAssessment, setLocation]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-lg text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const question = quizQuestions[currentQuestion];
   const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;

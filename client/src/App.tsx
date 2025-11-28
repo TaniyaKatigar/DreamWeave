@@ -8,6 +8,7 @@ import Landing from "@/pages/landing";
 import Login from "@/pages/login";
 import Quiz from "@/pages/quiz";
 import Results from "@/pages/results";
+import CareerDetail from "@/pages/career-detail";
 import ARPreview from "@/pages/ar-preview";
 import BrowseCareers from "@/pages/browse-careers";
 import NotFound from "@/pages/not-found";
@@ -44,6 +45,9 @@ function Router() {
       </Route>
       <Route path="/results">
         <ProtectedRoute component={Results} />
+      </Route>
+      <Route path="/career-detail">
+        <ProtectedRoute component={CareerDetail} />
       </Route>
       <Route path="/ar-preview">
         <ProtectedRoute component={ARPreview} />
