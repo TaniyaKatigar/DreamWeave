@@ -112,7 +112,7 @@ export default function Login() {
             <img 
               src={googleLogoUrl}
               alt="Google" 
-              className="h-5 w-5"
+              className="h-5 w-5 aspect-square object-contain"
             />
             Sign in with Google
           </Button>
