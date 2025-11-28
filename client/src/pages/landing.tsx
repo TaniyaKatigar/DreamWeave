@@ -6,6 +6,7 @@ import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ProfileDropdown } from "@/components/profile-dropdown";
+import Spline from '@splinetool/react-spline';
 import heroImage from "@assets/generated_images/hero_section_ar_student_illustration.png";
 import arDemoImage from "@assets/generated_images/ar_demo_interface_mockup.png";
 import logoImage from "@assets/Dream__1_-removebg-preview_1764358132723.png";
@@ -123,11 +124,9 @@ export default function Landing() {
               </p>
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden">
-              <iframe 
-                src="https://my.spline.design/eymprUNWavNDO4bB/scene" 
-                className="absolute inset-0 w-full h-full border-0"
-                allowFullScreen
-              ></iframe>
+              <div className="absolute inset-0 w-full h-full">
+                <Spline scene="https://prod.spline.design/eymprUNWavNDO4bB/scene.splinecode" />
+              </div>
               <img 
                 src={heroImage} 
                 alt="Student experiencing AR career preview" 
