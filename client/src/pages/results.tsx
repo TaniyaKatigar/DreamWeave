@@ -150,6 +150,16 @@ export default function Results() {
 
       <div className="container mx-auto px-6 py-12 max-w-4xl">
         <div className="space-y-8">
+          {career.image && (
+            <div className="w-full h-64 rounded-lg overflow-hidden border border-border">
+              <img 
+                src={career.image} 
+                alt={career.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+          
           <div className="text-center space-y-4">
             <Badge variant="outline" className="text-sm">
               Your Career Match Results
@@ -346,8 +356,17 @@ export default function Results() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {matchResults.topMatches.slice(1).map((match) => (
-                    <Card key={match.career.id} className="hover-elevate">
-                      <CardContent className="pt-6 space-y-4">
+                    <Card key={match.career.id} className="hover-elevate overflow-hidden flex flex-col">
+                      {match.career.image && (
+                        <div className="w-full h-40 overflow-hidden">
+                          <img 
+                            src={match.career.image} 
+                            alt={match.career.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <CardContent className="pt-6 space-y-4 flex-1 flex flex-col">
                         <div>
                           <h3 className="text-lg font-semibold">{match.career.title}</h3>
                           <p className="text-sm text-muted-foreground">{match.career.category}</p>
@@ -366,7 +385,7 @@ export default function Results() {
 
                         <Button 
                           onClick={() => handleTryCareer(match)}
-                          className="w-full"
+                          className="w-full mt-auto"
                           data-testid={`button-try-career-${match.career.id}`}
                         >
                           Try This Career
