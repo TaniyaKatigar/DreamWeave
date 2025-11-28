@@ -1,5 +1,6 @@
 import { type User, type InsertUser, type Assessment, type InsertAssessment } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { firestoreAdminStorage } from "./firestore-admin-storage";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -98,13 +99,17 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Use Firestore storage by default if Firebase is configured, otherwise fall back to in-memory
+// Use Firebase Admin Firestore first, then fall back to in-memory
 let storage: IStorage;
 try {
-  const { firestoreStorage } = require("./firestore-storage");
-  storage = firestoreStorage;
+  if (process.env.FIREBASE_ADMIN_SDK_JSON) {
+    storage = firestoreAdminStorage;
+  } else {
+    console.warn("FIREBASE_ADMIN_SDK_JSON not set, using in-memory storage");
+    storage = new MemStorage();
+  }
 } catch (error) {
-  console.warn("Firestore not available, using in-memory storage");
+  console.warn("Firebase Admin not available, using in-memory storage:", error);
   storage = new MemStorage();
 }
 
