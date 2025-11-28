@@ -71,27 +71,27 @@ export function generateCareerReport(
   // Description
   doc.setFontSize(10);
   doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-  const descLines = doc.splitTextToSize(career.description, contentWidth);
+  const descLines = doc.splitTextToSize(career.description, contentWidth - 55);
   doc.text(descLines, margins.left, yPos);
-  yPos += descLines.length * 5.5 + 8;
-
-  // Match Score Box (positioned on right side)
+  const descHeight = descLines.length * 5.5;
+  
+  // Match Score Box (positioned on right side, aligned with description start)
   const boxWidth = 50;
   const boxHeight = 45;
   doc.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
   doc.setDrawColor(borderGray[0], borderGray[1], borderGray[2]);
   doc.setLineWidth(1);
-  doc.rect(pageWidth - margins.right - boxWidth, 50, boxWidth, boxHeight, 'FD');
+  doc.rect(pageWidth - margins.right - boxWidth, yPos - 2, boxWidth, boxHeight, 'FD');
 
   doc.setFontSize(28);
   doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-  doc.text(`${matchScore}%`, pageWidth - margins.right - boxWidth / 2, 75, { align: 'center' });
+  doc.text(`${matchScore}%`, pageWidth - margins.right - boxWidth / 2, yPos + 15, { align: 'center' });
 
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
-  doc.text("Match Score", pageWidth - margins.right - boxWidth / 2, 88, { align: 'center' });
+  doc.text("Match Score", pageWidth - margins.right - boxWidth / 2, yPos + 30, { align: 'center' });
 
-  yPos += 5;
+  yPos += Math.max(descHeight + 8, boxHeight + 5);
 
   // Section Divider
   checkPageBreak(15);
@@ -110,8 +110,19 @@ export function generateCareerReport(
   doc.setFont(undefined, 'normal');
   yPos += 10;
 
+  // Helper function to format salary properly for PDF
+  const formatSalaryForPDF = (min: number, max: number) => {
+    const formatVal = (val: number) => {
+      if (val >= 10000000) return `₹${(val / 10000000).toFixed(1)}Cr`;
+      if (val >= 100000) return `₹${(val / 100000).toFixed(0)}L`;
+      if (val > 0) return `₹${(val / 1000).toFixed(0)}K`;
+      return "₹0";
+    };
+    return `${formatVal(min)} - ${formatVal(max)}`;
+  };
+
   const insights = [
-    { label: "Salary Range", value: formatSalary(career.salaryRange.min, career.salaryRange.max) },
+    { label: "Salary Range", value: formatSalaryForPDF(career.salaryRange.min, career.salaryRange.max) },
     { label: "Growth Potential", value: `${career.growthPotential}%` },
     { label: "Stress Level", value: `${career.stressIndex}%` },
     { label: "Mismatch Risk", value: `${career.mismatchProbability}%` },
