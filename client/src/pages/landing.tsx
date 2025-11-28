@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, Brain, Eye, TrendingUp, Award, LogOut, Headphones } from "lucide-react";
+import { ArrowRight, Brain, Eye, TrendingUp, Award, LogOut, Headphones } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import heroImage from "@assets/generated_images/hero_section_ar_student_illustration.png";
 import arDemoImage from "@assets/generated_images/ar_demo_interface_mockup.png";
+import logoImage from "@assets/Dream_1764357537158.png";
 
 export default function Landing() {
   const [, setLocation] = useLocation();
@@ -60,8 +61,7 @@ export default function Landing() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
         <div className="container mx-auto flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">DreamWeave</span>
+            <img src={logoImage} alt="DreamWeave" className="h-8" />
           </div>
           <nav className="hidden md:flex items-center gap-6">
             <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
@@ -298,9 +298,8 @@ export default function Landing() {
 
       <footer className="border-t py-12">
         <div className="container mx-auto px-6 max-w-7xl text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">DreamWeave</span>
+          <div className="flex items-center justify-center mb-4">
+            <img src={logoImage} alt="DreamWeave" className="h-12" />
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             Transforming career counseling with immersive WebAR technology and AI-powered insights.
