@@ -132,7 +132,7 @@ export default function Landing() {
               <img 
                 src={heroImage} 
                 alt="Student experiencing AR career preview" 
-                className="w-full h-full object-cover rounded-2xl relative z-20"
+                className="w-64 h-64 object-cover rounded-2xl relative z-20 mx-auto"
               />
             </div>
           </div>
