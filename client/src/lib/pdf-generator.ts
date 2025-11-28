@@ -9,79 +9,116 @@ export function generateCareerReport(
   const { career, matchScore, breakdown } = matchResult;
   const doc = new jsPDF();
 
-  const primaryColor = [33, 150, 243]; // Blue
-  const textColor = [51, 51, 51];
-  const lightGray = [240, 240, 240];
+  const primaryColor = [33, 150, 243];
+  const accentColor = [76, 175, 80];
+  const textColor = [40, 40, 40];
+  const lightGray = [245, 245, 245];
+  const borderGray = [220, 220, 220];
 
-  doc.setFontSize(24);
-  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-  doc.text("DreamWeave Career Report", 20, 25);
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margins = { top: 15, left: 18, right: 18, bottom: 15 };
+  let yPos = margins.top;
 
-  doc.setFontSize(10);
-  doc.setTextColor(128, 128, 128);
-  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 32);
-  doc.text(`For: ${userName}`, 20, 37);
+  // Header
+  doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.rect(0, 0, pageWidth, 35, 'F');
 
-  doc.setLineWidth(0.5);
-  doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-  doc.line(20, 40, 190, 40);
-
-  let yPos = 50;
-
-  doc.setFontSize(18);
-  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-  doc.text(career.title, 20, yPos);
+  doc.setFontSize(28);
+  doc.setTextColor(255, 255, 255);
+  doc.text("DreamWeave", margins.left, 18);
   
-  yPos += 7;
   doc.setFontSize(10);
-  doc.setTextColor(128, 128, 128);
-  doc.text(career.category, 20, yPos);
+  doc.setTextColor(200, 220, 255);
+  doc.text("Career Insights Report", margins.left, 28);
 
-  yPos += 15;
+  yPos = 45;
+
+  // Career Title Section
+  doc.setFontSize(22);
+  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.text(career.title, margins.left, yPos);
+  yPos += 8;
+
   doc.setFontSize(11);
-  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-  const descLines = doc.splitTextToSize(career.description, 170);
-  doc.text(descLines, 20, yPos);
-  yPos += descLines.length * 6 + 10;
+  doc.setTextColor(100, 100, 100);
+  doc.text(career.category, margins.left, yPos);
+  yPos += 12;
 
-  const matchScoreX = 150;
+  // Description
+  doc.setFontSize(10);
+  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+  const descLines = doc.splitTextToSize(career.description, pageWidth - 2 * margins.left);
+  doc.text(descLines, margins.left, yPos);
+  yPos += descLines.length * 5 + 12;
+
+  // Match Score Box
+  const boxWidth = 50;
+  const boxHeight = 45;
   doc.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
-  doc.roundedRect(matchScoreX, 50, 35, 35, 3, 3, 'F');
-  
-  doc.setFontSize(24);
-  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-  doc.text(`${matchScore}%`, matchScoreX + 17.5, 70, { align: 'center' });
-  
-  doc.setFontSize(9);
-  doc.setTextColor(128, 128, 128);
-  doc.text('Match', matchScoreX + 17.5, 77, { align: 'center' });
-  doc.text('Score', matchScoreX + 17.5, 82, { align: 'center' });
+  doc.setDrawColor(borderGray[0], borderGray[1], borderGray[2]);
+  doc.setLineWidth(1);
+  doc.rect(pageWidth - margins.right - boxWidth, 50, boxWidth, boxHeight, 'FD');
 
+  doc.setFontSize(28);
+  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.text(`${matchScore}%`, pageWidth - margins.right - boxWidth / 2, 75, { align: 'center' });
+
+  doc.setFontSize(9);
+  doc.setTextColor(100, 100, 100);
+  doc.text("Match Score", pageWidth - margins.right - boxWidth / 2, 88, { align: 'center' });
+
+  // Section Divider
+  doc.setDrawColor(borderGray[0], borderGray[1], borderGray[2]);
+  doc.setLineWidth(0.3);
+  doc.line(margins.left, yPos, pageWidth - margins.right, yPos);
+  yPos += 10;
+
+  // Career Insights Section
   doc.setFontSize(14);
-  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-  doc.text("Career Insights", 20, yPos);
+  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.setFont(undefined, 'bold');
+  doc.text("Career Insights", margins.left, yPos);
+  doc.setFont(undefined, 'normal');
   yPos += 10;
 
   const insights = [
-    { label: "Salary Range", value: formatSalary(career.salaryRange.min, career.salaryRange.max) },
-    { label: "Growth Potential", value: `${career.growthPotential}% - ${career.growthPotential > 85 ? 'Excellent' : 'Good'}` },
-    { label: "Stress Level", value: `${career.stressIndex}% - ${career.stressIndex < 50 ? 'Low' : career.stressIndex < 75 ? 'Moderate' : 'High'}` },
-    { label: "Mismatch Risk", value: `${career.mismatchProbability}% - ${career.mismatchProbability < 20 ? 'Very Low' : 'Low'}` },
+    { label: "Salary Range", value: formatSalary(career.salaryRange.min, career.salaryRange.max), icon: "💰" },
+    { label: "Growth Potential", value: `${career.growthPotential}%`, icon: "📈" },
+    { label: "Stress Level", value: `${career.stressIndex}%`, icon: "⚡" },
+    { label: "Mismatch Risk", value: `${career.mismatchProbability}%`, icon: "⚠️" },
   ];
 
   doc.setFontSize(10);
   insights.forEach((insight) => {
-    doc.setTextColor(128, 128, 128);
-    doc.text(insight.label + ":", 25, yPos);
-    doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-    doc.text(insight.value, 65, yPos);
-    yPos += 7;
+    // Background
+    doc.setFillColor(245, 250, 255);
+    doc.rect(margins.left, yPos - 5, pageWidth - 2 * margins.left, 7, 'F');
+
+    doc.setTextColor(100, 100, 100);
+    doc.setFont(undefined, 'bold');
+    doc.text(insight.label + ":", margins.left + 3, yPos);
+
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.text(insight.value, pageWidth - margins.right - 30, yPos);
+
+    yPos += 8;
   });
 
   yPos += 8;
+
+  // Section Divider
+  doc.setDrawColor(borderGray[0], borderGray[1], borderGray[2]);
+  doc.line(margins.left, yPos, pageWidth - margins.right, yPos);
+  yPos += 10;
+
+  // Match Breakdown Section
   doc.setFontSize(14);
-  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-  doc.text("Match Breakdown", 20, yPos);
+  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.setFont(undefined, 'bold');
+  doc.text("Your Match Breakdown", margins.left, yPos);
+  doc.setFont(undefined, 'normal');
   yPos += 10;
 
   const breakdownData = [
@@ -92,62 +129,95 @@ export function generateCareerReport(
 
   doc.setFontSize(10);
   breakdownData.forEach((item) => {
-    doc.setTextColor(128, 128, 128);
-    doc.text(item.label + ":", 25, yPos);
-    
-    doc.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
-    doc.rect(65, yPos - 4, 100, 5, 'F');
-    
-    const barWidth = (item.value / 100) * 100;
-    doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-    doc.rect(65, yPos - 4, barWidth, 5, 'F');
-    
-    doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-    doc.text(`${item.value}%`, 170, yPos);
-    
-    yPos += 10;
+    doc.setTextColor(100, 100, 100);
+    doc.text(item.label, margins.left + 3, yPos);
+
+    // Background bar
+    doc.setFillColor(borderGray[0], borderGray[1], borderGray[2]);
+    doc.rect(margins.left + 75, yPos - 3, 90, 5, 'F');
+
+    // Filled bar
+    doc.setFillColor(accentColor[0], accentColor[1], accentColor[2]);
+    const barWidth = (item.value / 100) * 90;
+    doc.rect(margins.left + 75, yPos - 3, barWidth, 5, 'F');
+
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.setFont(undefined, 'bold');
+    doc.text(`${item.value}%`, pageWidth - margins.right - 10, yPos);
+    doc.setFont(undefined, 'normal');
+
+    yPos += 9;
   });
 
   yPos += 8;
-  doc.setFontSize(14);
-  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-  doc.text("Industry Trends", 20, yPos);
-  yPos += 7;
 
-  doc.setFontSize(10);
-  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-  const trendsLines = doc.splitTextToSize(career.industryTrends, 170);
-  doc.text(trendsLines, 20, yPos);
-  yPos += trendsLines.length * 6 + 10;
+  // Section Divider
+  doc.setDrawColor(borderGray[0], borderGray[1], borderGray[2]);
+  doc.line(margins.left, yPos, pageWidth - margins.right, yPos);
+  yPos += 10;
 
+  // Required Skills Section
   doc.setFontSize(14);
-  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-  doc.text("Required Skills", 20, yPos);
-  yPos += 7;
+  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.setFont(undefined, 'bold');
+  doc.text("Required Skills", margins.left, yPos);
+  doc.setFont(undefined, 'normal');
+  yPos += 10;
 
   doc.setFontSize(9);
-  let xPos = 20;
-  career.requiredSkills.forEach((skill, idx) => {
-    const skillWidth = doc.getTextWidth(skill) + 8;
-    
-    if (xPos + skillWidth > 190) {
-      xPos = 20;
+  let xPos = margins.left;
+  career.requiredSkills.forEach((skill) => {
+    const skillWidth = doc.getTextWidth(skill) + 10;
+
+    if (xPos + skillWidth > pageWidth - margins.right) {
+      xPos = margins.left;
       yPos += 8;
     }
-    
-    doc.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
-    doc.roundedRect(xPos, yPos - 4, skillWidth, 6, 2, 2, 'F');
-    doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-    doc.text(skill, xPos + 4, yPos);
-    
-    xPos += skillWidth + 4;
+
+    // Skill badge
+    doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.roundedRect(xPos, yPos - 4.5, skillWidth, 7, 1.5, 1.5, 'FD');
+
+    doc.setTextColor(255, 255, 255);
+    doc.text(skill, xPos + 5, yPos);
+
+    xPos += skillWidth + 5;
   });
 
   yPos += 12;
+
+  // Section Divider
+  doc.setDrawColor(borderGray[0], borderGray[1], borderGray[2]);
+  doc.line(margins.left, yPos, pageWidth - margins.right, yPos);
+  yPos += 10;
+
+  // Industry Trends Section
   doc.setFontSize(14);
-  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-  doc.text("Recommended Next Steps", 20, yPos);
+  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.setFont(undefined, 'bold');
+  doc.text("Industry Trends & Outlook", margins.left, yPos);
+  doc.setFont(undefined, 'normal');
   yPos += 8;
+
+  doc.setFontSize(10);
+  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+  const trendsLines = doc.splitTextToSize(career.industryTrends, pageWidth - 2 * margins.left);
+  doc.text(trendsLines, margins.left, yPos);
+  yPos += trendsLines.length * 5 + 12;
+
+  // Section Divider
+  doc.setDrawColor(borderGray[0], borderGray[1], borderGray[2]);
+  doc.line(margins.left, yPos, pageWidth - margins.right, yPos);
+  yPos += 10;
+
+  // Recommended Next Steps Section
+  doc.setFontSize(14);
+  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.setFont(undefined, 'bold');
+  doc.text("Recommended Next Steps", margins.left, yPos);
+  doc.setFont(undefined, 'normal');
+  yPos += 10;
 
   const nextSteps = [
     "Research educational pathways and degree programs for this career",
@@ -159,17 +229,31 @@ export function generateCareerReport(
 
   doc.setFontSize(10);
   nextSteps.forEach((step, idx) => {
-    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-    doc.text(`${idx + 1}.`, 22, yPos);
+    // Number circle
+    doc.setFillColor(accentColor[0], accentColor[1], accentColor[2]);
+    doc.circle(margins.left + 4, yPos - 1, 2.5, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(8);
+    doc.text(`${idx + 1}`, margins.left + 4, yPos, { align: 'center' });
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+
     doc.setTextColor(textColor[0], textColor[1], textColor[2]);
-    const stepLines = doc.splitTextToSize(step, 160);
-    doc.text(stepLines, 30, yPos);
-    yPos += stepLines.length * 6 + 2;
+    const stepLines = doc.splitTextToSize(step, pageWidth - 2 * margins.left - 15);
+    doc.text(stepLines, margins.left + 12, yPos);
+    yPos += stepLines.length * 5 + 5;
   });
 
+  // Footer
+  yPos += 5;
+  doc.setDrawColor(borderGray[0], borderGray[1], borderGray[2]);
+  doc.line(margins.left, pageHeight - 10, pageWidth - margins.right, pageHeight - 10);
+
   doc.setFontSize(8);
-  doc.setTextColor(128, 128, 128);
-  doc.text("Generated by DreamWeave - Experience Your Future Career", 105, 285, { align: 'center' });
+  doc.setTextColor(150, 150, 150);
+  doc.text(`Generated by DreamWeave - ${new Date().toLocaleDateString()}`, pageWidth / 2, pageHeight - 5, { align: 'center' });
 
   doc.save(`DreamWeave_${career.title.replace(/\s+/g, '_')}_Report.pdf`);
 }
