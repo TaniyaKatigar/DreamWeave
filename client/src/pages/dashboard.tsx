@@ -6,11 +6,12 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowRight, TrendingUp, DollarSign, Activity, Brain } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth-context";
-import { careers } from "@/lib/careerData";
 import { formatSalary } from "@/lib/careerData";
+import { useRealtimeCareers } from "@/lib/useRealtimeCareers";
 
 export default function Dashboard() {
   const [, setLocation] = useLocation();
+  const { data: careers = [], isLoading: careersLoading } = useRealtimeCareers();
   const [selectedCareer, setSelectedCareer] = useState<typeof careers[0] | null>(null);
   const { user } = useAuth();
 
@@ -145,12 +146,23 @@ export default function Dashboard() {
     );
   }
 
+  if (careersLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-lg text-muted-foreground">Loading real-time career data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Explore Careers</h1>
-          <p className="text-lg text-muted-foreground">Browse all career options and experience them with AR</p>
+          <p className="text-lg text-muted-foreground">Browse all career options powered by real-time AI insights and trends</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

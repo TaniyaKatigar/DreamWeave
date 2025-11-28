@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { fetchRealtimeCareers } from "./gemini-insights";
 import { 
   careerMatchRequestSchema, 
   saveAssessmentRequestSchema,
@@ -334,6 +335,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error in /api/track-ar-preview:", error);
       res.status(400).json({ error: "Failed to track AR preview" });
+    }
+  });
+
+  // Get real-time careers from Gemini based on current trends
+  app.get("/api/careers-realtime", async (req, res) => {
+    try {
+      const realtimeCareers = await fetchRealtimeCareers();
+      if (realtimeCareers.length > 0) {
+        res.json(realtimeCareers);
+      } else {
+        res.json(careers);
+      }
+    } catch (error) {
+      console.error("Error in /api/careers-realtime:", error);
+      res.json(careers);
     }
   });
 
