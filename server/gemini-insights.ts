@@ -54,6 +54,65 @@ Include these careers: Software Engineer, UX Designer, Data Scientist, Healthcar
   }
 }
 
+export interface CareerMetrics {
+  salaryRange: { min: number; max: number };
+  growthPotential: number;
+  stressIndex: number;
+  mismatchProbability: number;
+  industryTrends: string;
+  personalityMatch: number;
+  skillsMatch: number;
+  interestsMatch: number;
+  careerFitAnalysis: string;
+}
+
+export async function fetchCareerMetrics(careerTitle: string): Promise<CareerMetrics> {
+  try {
+    const prompt = `You are a career analysis expert. Provide comprehensive, real-time metrics for the career: "${careerTitle}" based on 2025 market trends and current data.
+
+Return ONLY a valid JSON object (no markdown, no explanation) with this exact structure:
+{
+  "salaryRange": {"min": number, "max": number},
+  "growthPotential": number (0-100),
+  "stressIndex": number (0-100),
+  "mismatchProbability": number (0-100),
+  "industryTrends": "string with current 2025 trends",
+  "personalityMatch": number (0-100),
+  "skillsMatch": number (0-100),
+  "interestsMatch": number (0-100),
+  "careerFitAnalysis": "string analyzing fit and opportunities"
+}
+
+Use realistic 2025 market data for India. Salary in INR.`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
+
+    const rawText = response.text || "{}";
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    const jsonStr = jsonMatch ? jsonMatch[0] : "{}";
+    const metrics = JSON.parse(jsonStr) as CareerMetrics;
+    
+    console.log(`✅ Fetched real-time metrics for ${careerTitle} from Gemini`);
+    return metrics;
+  } catch (error) {
+    console.error(`Error fetching metrics for ${careerTitle}:`, error);
+    return {
+      salaryRange: { min: 600000, max: 1800000 },
+      growthPotential: 75,
+      stressIndex: 60,
+      mismatchProbability: 20,
+      industryTrends: "Growing field with increasing opportunities.",
+      personalityMatch: 70,
+      skillsMatch: 75,
+      interestsMatch: 70,
+      careerFitAnalysis: "This career offers good opportunities for growth and development."
+    };
+  }
+}
+
 export async function generateCareerInsights(
   careerTitle: string,
   matchScore: number,

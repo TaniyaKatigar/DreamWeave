@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { fetchRealtimeCareers } from "./gemini-insights";
+import { fetchRealtimeCareers, fetchCareerMetrics } from "./gemini-insights";
 import { 
   careerMatchRequestSchema, 
   saveAssessmentRequestSchema,
@@ -350,6 +350,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error in /api/careers-realtime:", error);
       res.json(careers);
+    }
+  });
+
+  // Get real-time career metrics from Gemini
+  app.get("/api/career-metrics/:careerName", async (req, res) => {
+    try {
+      const { careerName } = req.params;
+      const metrics = await fetchCareerMetrics(decodeURIComponent(careerName));
+      res.json(metrics);
+    } catch (error) {
+      console.error("Error in /api/career-metrics:", error);
+      res.status(500).json({ error: "Failed to fetch career metrics" });
     }
   });
 

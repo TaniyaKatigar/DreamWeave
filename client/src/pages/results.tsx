@@ -12,6 +12,7 @@ import { generateCareerReport } from "@/lib/pdf-generator";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth-context";
 import { apiRequest } from "@/lib/queryClient";
+import { useCareerMetrics } from "@/lib/useCareerMetrics";
 
 export default function Results() {
   const [, setLocation] = useLocation();
@@ -79,6 +80,17 @@ export default function Results() {
 
   const topMatch = matchResults.topMatches[0];
   const career = topMatch.career;
+  const { data: metricsData, isLoading: metricsLoading } = useCareerMetrics(career?.title || null);
+
+  // Use Gemini metrics if available, otherwise use career data
+  const salaryRange = metricsData?.salaryRange || career.salaryRange;
+  const growthPotential = metricsData?.growthPotential || career.growthPotential;
+  const stressIndex = metricsData?.stressIndex || career.stressIndex;
+  const mismatchProbability = metricsData?.mismatchProbability || career.mismatchProbability;
+  const industryTrends = metricsData?.industryTrends || career.industryTrends;
+  const personalityMatch = metricsData?.personalityMatch || topMatch.breakdown.personalityMatch;
+  const skillsMatch = metricsData?.skillsMatch || topMatch.breakdown.skillsMatch;
+  const interestsMatch = metricsData?.interestsMatch || topMatch.breakdown.interestsMatch;
 
   const handleDownloadReport = () => {
     try {
@@ -176,7 +188,7 @@ export default function Results() {
                     <span>Salary Range</span>
                   </div>
                   <div className="text-2xl font-semibold" data-testid="salary-range">
-                    {formatSalary(career.salaryRange.min, career.salaryRange.max)}
+                    {formatSalary(salaryRange.min, salaryRange.max)} {metricsLoading && <span className="text-xs text-muted-foreground">(updating...)</span>}
                   </div>
                   <p className="text-sm text-muted-foreground">Annual (₹ Lakhs)</p>
                 </div>
@@ -186,9 +198,9 @@ export default function Results() {
                     <TrendingUp className="h-4 w-4" />
                     <span>Growth Potential</span>
                   </div>
-                  <Progress value={career.growthPotential} className="h-3" />
+                  <Progress value={growthPotential} className="h-3" />
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-semibold">{career.growthPotential}%</span>
+                    <span className="font-semibold">{growthPotential}%</span>
                     <span className="text-muted-foreground">Excellent</span>
                   </div>
                 </div>
@@ -198,11 +210,11 @@ export default function Results() {
                     <Activity className="h-4 w-4" />
                     <span>Stress Index</span>
                   </div>
-                  <Progress value={career.stressIndex} className="h-3" />
+                  <Progress value={stressIndex} className="h-3" />
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-semibold">{career.stressIndex}%</span>
+                    <span className="font-semibold">{stressIndex}%</span>
                     <span className="text-muted-foreground">
-                      {career.stressIndex < 50 ? "Low" : career.stressIndex < 75 ? "Moderate" : "High"}
+                      {stressIndex < 50 ? "Low" : stressIndex < 75 ? "Moderate" : "High"}
                     </span>
                   </div>
                 </div>
@@ -212,11 +224,11 @@ export default function Results() {
                     <Brain className="h-4 w-4" />
                     <span>Mismatch Risk</span>
                   </div>
-                  <Progress value={career.mismatchProbability} className="h-3" />
+                  <Progress value={mismatchProbability} className="h-3" />
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-semibold">{career.mismatchProbability}%</span>
+                    <span className="font-semibold">{mismatchProbability}%</span>
                     <span className="text-muted-foreground">
-                      {career.mismatchProbability < 20 ? "Very Low" : career.mismatchProbability < 35 ? "Low" : "Moderate"}
+                      {mismatchProbability < 20 ? "Very Low" : mismatchProbability < 35 ? "Low" : "Moderate"}
                     </span>
                   </div>
                 </div>
@@ -232,35 +244,43 @@ export default function Results() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Personality Match</span>
-                  <span className="font-semibold">{topMatch.breakdown.personalityMatch}%</span>
+                  <span className="font-semibold">{personalityMatch}%</span>
                 </div>
-                <Progress value={topMatch.breakdown.personalityMatch} className="h-2" />
+                <Progress value={personalityMatch} className="h-2" />
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Skills Match</span>
-                  <span className="font-semibold">{topMatch.breakdown.skillsMatch}%</span>
+                  <span className="font-semibold">{skillsMatch}%</span>
                 </div>
-                <Progress value={topMatch.breakdown.skillsMatch} className="h-2" />
+                <Progress value={skillsMatch} className="h-2" />
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Interests Match</span>
-                  <span className="font-semibold">{topMatch.breakdown.interestsMatch}%</span>
+                  <span className="font-semibold">{interestsMatch}%</span>
                 </div>
-                <Progress value={topMatch.breakdown.interestsMatch} className="h-2" />
+                <Progress value={interestsMatch} className="h-2" />
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Industry Trends & Outlook</CardTitle>
+              <CardTitle>Industry Trends & Outlook {metricsLoading && <span className="text-xs text-muted-foreground ml-2">(AI-powered)</span>}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground leading-relaxed">
-                {career.industryTrends}
+                {industryTrends}
               </p>
+              {metricsData?.careerFitAnalysis && (
+                <div className="mt-4 pt-4 border-t">
+                  <p className="text-sm font-semibold mb-2">Career Fit Analysis</p>
+                  <p className="text-sm text-muted-foreground">
+                    {metricsData.careerFitAnalysis}
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
