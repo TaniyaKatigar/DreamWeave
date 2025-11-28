@@ -69,4 +69,14 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Use Firestore storage by default if Firebase is configured, otherwise fall back to in-memory
+let storage: IStorage;
+try {
+  const { firestoreStorage } = require("./firestore-storage");
+  storage = firestoreStorage;
+} catch (error) {
+  console.warn("Firestore not available, using in-memory storage");
+  storage = new MemStorage();
+}
+
+export { storage };

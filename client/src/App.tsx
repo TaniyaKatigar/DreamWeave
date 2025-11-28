@@ -8,6 +8,7 @@ import Landing from "@/pages/landing";
 import Quiz from "@/pages/quiz";
 import Results from "@/pages/results";
 import ARPreview from "@/pages/ar-preview";
+import BrowseCareers from "@/pages/browse-careers";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/quiz" component={Quiz} />
       <Route path="/results" component={Results} />
       <Route path="/ar-preview" component={ARPreview} />
+      <Route path="/browse-careers" component={BrowseCareers} />
       <Route component={NotFound} />
     </Switch>
   );
