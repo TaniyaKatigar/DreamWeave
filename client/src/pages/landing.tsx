@@ -101,8 +101,8 @@ export default function Landing() {
             </a>
             {user ? (
               <>
-                <Button variant="outline" size="sm" onClick={() => setLocation("/dashboard")} data-testid="button-dashboard-nav">
-                  Dashboard
+                <Button variant="outline" size="sm" onClick={() => setLocation("/browse-careers")} data-testid="button-browse-careers-nav">
+                  Browse all careers
                 </Button>
                 <ProfileDropdown />
               </>
