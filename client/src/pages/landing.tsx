@@ -59,11 +59,11 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-        <div className="flex items-start justify-between pt-6 px-6">
-          <div className="flex items-center">
+        <div className="container mx-auto flex h-16 items-center justify-between px-6">
+          <div className="flex items-center gap-2">
             <img src={logoImage} alt="DreamWeave" className="h-40" />
           </div>
-          <nav className="hidden md:flex items-center gap-6 pt-4">
+          <nav className="hidden md:flex items-center gap-6">
             <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               How It Works
             </a>
