@@ -61,7 +61,7 @@ export default function Landing() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
         <div className="container mx-auto flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-2">
-            <img src={logoImage} alt="DreamWeave" className="h-14" />
+            <img src={logoImage} alt="DreamWeave" className="h-56" />
           </div>
           <nav className="hidden md:flex items-center gap-6">
             <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
@@ -299,7 +299,7 @@ export default function Landing() {
       <footer className="border-t py-12">
         <div className="container mx-auto px-6 max-w-7xl text-center">
           <div className="flex items-center justify-center mb-4">
-            <img src={logoImage} alt="DreamWeave" className="h-20" />
+            <img src={logoImage} alt="DreamWeave" className="h-80" />
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             Transforming career counseling with immersive WebAR technology and AI-powered insights.
