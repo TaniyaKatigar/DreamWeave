@@ -113,10 +113,10 @@ export function generateCareerReport(
   // Helper function to format salary properly for PDF
   const formatSalaryForPDF = (min: number, max: number) => {
     const formatVal = (val: number) => {
-      if (val >= 10000000) return `₹${(val / 10000000).toFixed(1)}Cr`;
-      if (val >= 100000) return `₹${(val / 100000).toFixed(0)}L`;
-      if (val > 0) return `₹${(val / 1000).toFixed(0)}K`;
-      return "₹0";
+      if (val >= 10000000) return `Rs.${(val / 10000000).toFixed(1)}Cr`;
+      if (val >= 100000) return `Rs.${(val / 100000).toFixed(0)}L`;
+      if (val > 0) return `Rs.${(val / 1000).toFixed(0)}K`;
+      return "Rs.0";
     };
     return `${formatVal(min)} - ${formatVal(max)}`;
   };
