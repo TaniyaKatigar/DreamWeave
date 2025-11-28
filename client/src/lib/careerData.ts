@@ -296,11 +296,13 @@ export const careers: Career[] = [
   },
 ];
 
-export function formatSalary(min: number, max: number, currency: string = "INR"): string {
-  const formatValue = (val: number) => {
-    if (val >= 10000000) return `₹${(val / 10000000).toFixed(1)}Cr`;
-    if (val >= 100000) return `₹${(val / 100000).toFixed(0)}L`;
-    return `₹${(val / 1000).toFixed(0)}K`;
+export function formatSalary(min: number | string, max: number | string, currency: string = "INR"): string {
+  const formatValue = (val: number | string) => {
+    const numVal = typeof val === 'string' ? parseInt(val, 10) : val;
+    if (isNaN(numVal)) return "N/A";
+    if (numVal >= 10000000) return `₹${(numVal / 10000000).toFixed(1)}Cr`;
+    if (numVal >= 100000) return `₹${(numVal / 100000).toFixed(0)}L`;
+    return `₹${(numVal / 1000).toFixed(0)}K`;
   };
   return `${formatValue(min)} - ${formatValue(max)}`;
 }
