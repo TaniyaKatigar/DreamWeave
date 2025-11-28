@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Loader2 } from "lucide-react";
 import { Sparkles, ArrowRight, Download, TrendingUp, DollarSign, Activity, Brain } from "lucide-react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -71,12 +72,29 @@ export default function Results() {
   const careerName = matchResults?.topMatches?.[0]?.career?.title || null;
   const { data: metricsData, isLoading: metricsLoading } = useCareerMetrics(careerName);
 
-  if (isLoading || !matchResults) {
+  const [progress, setProgress] = useState(33);
+
+  useEffect(() => {
+    if (isLoading || !matchResults) {
+      setProgress(33);
+    } else if (metricsLoading) {
+      setProgress(66);
+    } else {
+      setProgress(100);
+    }
+  }, [isLoading, matchResults, metricsLoading]);
+
+  if (isLoading || !matchResults || metricsLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-full fixed top-0 left-0 z-50">
+          <Progress value={progress} className="h-1 rounded-none" />
+        </div>
         <div className="text-center space-y-4">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-lg text-muted-foreground">Analyzing your responses...</p>
+          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto" />
+          <p className="text-lg text-muted-foreground">
+            {isLoading || !matchResults ? "Analyzing your responses..." : "Loading career insights..."}
+          </p>
         </div>
       </div>
     );
@@ -214,7 +232,7 @@ export default function Results() {
                     <span>Salary Range</span>
                   </div>
                   <div className="text-2xl font-semibold" data-testid="salary-range">
-                    {formatSalary(salaryRange.min, salaryRange.max)} {metricsLoading && <span className="text-xs text-muted-foreground">(updating...)</span>}
+                    {formatSalary(salaryRange.min, salaryRange.max)}
                   </div>
                   <p className="text-sm text-muted-foreground">Annual (₹ Lakhs)</p>
                 </div>
@@ -293,7 +311,7 @@ export default function Results() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Career Fit Overview {metricsLoading && <span className="text-xs text-muted-foreground ml-2">(AI-powered)</span>}</CardTitle>
+              <CardTitle>Career Fit Overview <span className="text-xs text-muted-foreground ml-2">(AI-powered)</span></CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
