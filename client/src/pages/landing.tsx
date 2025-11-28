@@ -123,16 +123,14 @@ export default function Landing() {
                 Free • No credit card • 6-minute quiz
               </p>
             </div>
-            <div className="relative h-96 rounded-2xl overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-56 h-56">
-                  <Spline scene="https://prod.spline.design/eymprUNWavNDO4bB/scene.splinecode" />
-                </div>
+            <div className="relative h-96 rounded-2xl overflow-hidden flex items-center justify-center">
+              <div className="absolute w-full h-full">
+                <Spline scene="https://prod.spline.design/eymprUNWavNDO4bB/scene.splinecode" />
               </div>
               <img 
                 src={heroImage} 
                 alt="Student experiencing AR career preview" 
-                className="w-64 h-64 object-cover rounded-2xl relative z-20 mx-auto"
+                className="w-56 h-56 object-cover rounded-2xl relative z-20"
               />
             </div>
           </div>
