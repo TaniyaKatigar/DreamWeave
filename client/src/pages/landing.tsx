@@ -15,6 +15,23 @@ export default function Landing() {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed Out",
+        description: "You have been signed out successfully.",
+      });
+      setLocation("/login");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const features = [
     {
       icon: Eye,
@@ -89,6 +106,7 @@ export default function Landing() {
                 <Button 
                   variant="ghost" 
                   size="sm" 
+                  onClick={handleSignOut}
                   className="flex items-center gap-2"
                   data-testid="button-signout-nav"
                 >
