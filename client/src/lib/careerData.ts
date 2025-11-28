@@ -1,4 +1,5 @@
 import type { Career, QuizQuestion } from "@shared/schema";
+import teacherImage from "@assets/generated_images/teacher_instructing_students_in_classroom.png";
 
 export const quizQuestions: QuizQuestion[] = [
   {
@@ -255,7 +256,7 @@ export const careers: Career[] = [
     title: "Teacher",
     description: "Inspire and educate the next generation by sharing knowledge and fostering critical thinking.",
     category: "Education",
-    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&h=300&fit=crop&q=80",
+    image: teacherImage,
     salaryRange: { min: 350000, max: 900000, currency: "INR" },
     growthPotential: 65,
     stressIndex: 71,
