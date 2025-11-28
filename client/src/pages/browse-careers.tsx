@@ -52,7 +52,16 @@ export default function BrowseCareers() {
             ← Back
           </Button>
 
-          <Card className="mb-8">
+          <Card className="mb-8 overflow-hidden">
+            {selectedCareer.image && (
+              <div className="w-full h-64 overflow-hidden">
+                <img 
+                  src={selectedCareer.image} 
+                  alt={selectedCareer.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
             <CardHeader>
               <div className="flex items-center justify-between gap-4">
                 <div className="flex-1">
@@ -157,15 +166,24 @@ export default function BrowseCareers() {
           {careers.map((career) => (
             <Card 
               key={career.id} 
-              className="hover-elevate cursor-pointer transition-all"
+              className="hover-elevate cursor-pointer transition-all overflow-hidden flex flex-col"
               onClick={() => setSelectedCareer(career)}
               data-testid={`card-career-${career.id}`}
             >
+              {career.image && (
+                <div className="w-full h-40 overflow-hidden bg-muted">
+                  <img 
+                    src={career.image} 
+                    alt={career.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <CardHeader>
                 <CardTitle className="text-xl">{career.title}</CardTitle>
                 <Badge className="w-fit">{career.category}</Badge>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 flex-1 flex flex-col">
                 <p className="text-sm text-muted-foreground line-clamp-2">{career.description}</p>
                 
                 <div className="space-y-2">
@@ -181,7 +199,7 @@ export default function BrowseCareers() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full"
+                  className="w-full mt-auto"
                   data-testid={`button-explore-${career.id}`}
                 >
                   Explore <ArrowRight className="ml-2 w-3 h-3" />
