@@ -280,6 +280,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get user's assessment endpoint
+  app.get("/api/user-assessment", async (req, res) => {
+    try {
+      const userId = req.query.userId as string;
+      
+      if (!userId) {
+        return res.status(400).json({ error: "Missing userId parameter" });
+      }
+
+      const assessments = await storage.getAssessmentsByUserId(userId);
+      
+      // Return the first (and should be only) assessment
+      if (assessments.length > 0) {
+        res.json(assessments[0]);
+      } else {
+        res.status(404).json({ error: "No assessment found" });
+      }
+    } catch (error) {
+      console.error("Error in /api/user-assessment:", error);
+      res.status(400).json({ error: "Failed to fetch assessment" });
+    }
+  });
+
   // PDF report generation endpoint
   app.post("/api/report", async (req, res) => {
     try {

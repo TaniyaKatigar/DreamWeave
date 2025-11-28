@@ -301,15 +301,47 @@ export default function Results() {
             </Button>
           </div>
 
-          <div className="text-center">
-            <Button 
-              variant="ghost" 
-              onClick={() => setLocation("/quiz")}
-              data-testid="button-retake-quiz"
-            >
-              Take Quiz Again
-            </Button>
-          </div>
+          {/* Other Career Matches */}
+          {matchResults.topMatches.length > 1 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Explore Other Career Matches</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {matchResults.topMatches.slice(1).map((match) => (
+                    <Card key={match.career.id} className="hover-elevate">
+                      <CardContent className="pt-6 space-y-4">
+                        <div>
+                          <h3 className="text-lg font-semibold">{match.career.title}</h3>
+                          <p className="text-sm text-muted-foreground">{match.career.category}</p>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-xs text-muted-foreground">Match Score</p>
+                            <p className="text-2xl font-bold text-primary">{match.matchScore}%</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-muted-foreground">Salary</p>
+                            <p className="text-sm font-semibold">{formatSalary(match.career.salaryRange.min)}</p>
+                          </div>
+                        </div>
+
+                        <Button 
+                          onClick={() => handleTryCareer(match)}
+                          className="w-full"
+                          data-testid={`button-try-career-${match.career.id}`}
+                        >
+                          Try This Career
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </div>
