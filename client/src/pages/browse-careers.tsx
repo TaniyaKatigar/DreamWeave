@@ -36,7 +36,7 @@ export default function BrowseCareers() {
   };
 
   const handleClose = () => {
-    setLocation(-1 as any);
+    setSelectedCareer(null);
   };
 
   if (selectedCareer) {
