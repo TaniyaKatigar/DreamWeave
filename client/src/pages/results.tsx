@@ -67,6 +67,10 @@ export default function Results() {
     },
   });
 
+  // Call hook at top level before any conditionals
+  const careerName = matchResults?.topMatches?.[0]?.career?.title || null;
+  const { data: metricsData, isLoading: metricsLoading } = useCareerMetrics(careerName);
+
   if (isLoading || !matchResults) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -80,7 +84,6 @@ export default function Results() {
 
   const topMatch = matchResults.topMatches[0];
   const career = topMatch.career;
-  const { data: metricsData, isLoading: metricsLoading } = useCareerMetrics(career?.title || null);
 
   // Use Gemini metrics if available, otherwise use career data
   const salaryRange = metricsData?.salaryRange || career.salaryRange;
