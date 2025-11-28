@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, Brain, Eye, TrendingUp, Users, Award, BarChart3, LogOut } from "lucide-react";
+import { ArrowRight, Sparkles, Brain, Eye, TrendingUp, Users, Award, BarChart3, LogOut, Headphones } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/hooks/use-toast";
@@ -151,9 +151,11 @@ export default function Landing() {
                   size="lg" 
                   variant="outline" 
                   className="text-lg px-8 py-6"
-                  data-testid="button-watch-demo"
+                  onClick={() => setLocation("/browse-careers")}
+                  data-testid="button-try-ar-careers"
                 >
-                  Watch Demo
+                  <Eye className="mr-2 h-5 w-5" />
+                  Try AR Previews
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
