@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, TrendingUp, DollarSign, Activity, Brain, Eye, Sparkles, Download } from "lucide-react";
 import { useLocation } from "wouter";
+import { useAuth } from "@/lib/auth-context";
 import type { CareerMatchResult } from "@shared/schema";
 import { formatSalary } from "@/lib/careerData";
 import CareerFitmap from "@/components/career-fitmap";
@@ -14,6 +15,8 @@ import { useToast } from "@/hooks/use-toast";
 export default function CareerDetail() {
   const [, setLocation] = useLocation();
   const [matchResult, setMatchResult] = useState<CareerMatchResult | null>(null);
+  const { user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     const stored = sessionStorage.getItem("selectedCareerMatch");
@@ -21,10 +24,19 @@ export default function CareerDetail() {
       setLocation("/");
       return;
     }
-    setMatchResult(JSON.parse(stored));
-  }, [setLocation]);
-
-  const { toast } = useToast();
+    const matchData = JSON.parse(stored);
+    setMatchResult(matchData);
+    
+    // Track career exploration
+    if (user?.uid && matchData.career) {
+      fetch("/api/track-career-exploration", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.uid, careerTitle: matchData.career.title }),
+        credentials: "include",
+      }).catch(err => console.error("Error tracking career exploration:", err));
+    }
+  }, [setLocation, user]);
 
   if (!matchResult) {
     return (

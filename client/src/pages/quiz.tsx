@@ -32,7 +32,7 @@ export default function Quiz() {
 
   useEffect(() => {
     if (userAssessment) {
-      setLocation("/results");
+      setLocation("/dashboard");
     }
   }, [userAssessment, setLocation]);
 

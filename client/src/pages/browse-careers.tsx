@@ -5,15 +5,33 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ArrowRight, TrendingUp, DollarSign, Activity, Brain } from "lucide-react";
 import { useLocation } from "wouter";
+import { useAuth } from "@/lib/auth-context";
 import { careers } from "@/lib/careerData";
 import { formatSalary } from "@/lib/careerData";
 
 export default function BrowseCareers() {
   const [, setLocation] = useLocation();
   const [selectedCareer, setSelectedCareer] = useState<typeof careers[0] | null>(null);
+  const { user } = useAuth();
+
+  const trackCareerExploration = async (careerTitle: string) => {
+    if (user?.uid) {
+      try {
+        await fetch("/api/track-career-exploration", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: user.uid, careerTitle }),
+          credentials: "include",
+        });
+      } catch (err) {
+        console.error("Error tracking career exploration:", err);
+      }
+    }
+  };
 
   const handleTryAR = (career: typeof careers[0]) => {
     sessionStorage.setItem("selectedCareer", JSON.stringify(career));
+    trackCareerExploration(career.title);
     setLocation("/ar-preview");
   };
 

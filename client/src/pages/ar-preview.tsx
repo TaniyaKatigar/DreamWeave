@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, ArrowLeft, Info } from "lucide-react";
 import { useLocation } from "wouter";
+import { useAuth } from "@/lib/auth-context";
 import type { Career } from "@shared/schema";
 
 declare global {
@@ -16,6 +17,7 @@ declare global {
 export default function ARPreview() {
   const [, setLocation] = useLocation();
   const [career, setCareer] = useState<Career | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const stored = sessionStorage.getItem("selectedCareer");
@@ -23,8 +25,19 @@ export default function ARPreview() {
       setLocation("/");
       return;
     }
-    setCareer(JSON.parse(stored));
-  }, [setLocation]);
+    const careerData = JSON.parse(stored);
+    setCareer(careerData);
+    
+    // Track AR preview
+    if (user?.uid) {
+      fetch("/api/track-ar-preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.uid, careerTitle: careerData.title }),
+        credentials: "include",
+      }).catch(err => console.error("Error tracking AR preview:", err));
+    }
+  }, [setLocation, user]);
 
   if (!career) {
     return (

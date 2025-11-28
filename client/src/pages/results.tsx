@@ -36,6 +36,10 @@ export default function Results() {
       });
       return await res.json();
     },
+    onSuccess: () => {
+      // Redirect to dashboard after successful assessment save
+      setTimeout(() => setLocation("/dashboard"), 500);
+    },
   });
 
   const { data: matchResults, isLoading } = useQuery<CareerMatchResponse>({
