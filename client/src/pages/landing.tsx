@@ -10,6 +10,14 @@ import heroImage from "@assets/generated_images/hero_section_ar_student_illustra
 import arDemoImage from "@assets/generated_images/ar_demo_interface_mockup.png";
 import logoImage from "@assets/Dream__1_-removebg-preview_1764358132723.png";
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'spline-viewer': any;
+    }
+  }
+}
+
 export default function Landing() {
   const [, setLocation] = useLocation();
   const { user, signOut } = useAuth();
@@ -123,6 +131,8 @@ export default function Landing() {
               </p>
             </div>
             <div className="relative">
+              <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.5/build/spline-viewer.js"></script>
+              <spline-viewer url="https://prod.spline.design/eymprUNWavNDO4bB/scene.splinecode"></spline-viewer>
               <img 
                 src={heroImage} 
                 alt="Student experiencing AR career preview" 
