@@ -21,13 +21,14 @@ export default function History() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
 
-  const { data: assessment, isLoading } = useQuery<Assessment>({
+  const { data: assessment, isLoading } = useQuery<Assessment | null>({
     queryKey: ["/api/user-assessment", user?.uid],
     enabled: !!user?.uid,
     queryFn: async () => {
       const res = await fetch(`/api/user-assessment?userId=${user?.uid}`, {
         credentials: "include",
       });
+      if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to fetch assessment");
       return await res.json();
     },

@@ -9,6 +9,10 @@ export interface IStorage {
   getAssessment(id: string): Promise<Assessment | undefined>;
   getAssessmentsByUserId(userId: string): Promise<Assessment[]>;
   createAssessment(assessment: InsertAssessment): Promise<Assessment>;
+  
+  trackCareerExploration(userId: string, careerTitle: string): Promise<void>;
+  trackARPreview(userId: string, careerTitle: string): Promise<void>;
+  getPlatformMetrics(): Promise<any>;
 }
 
 export class MemStorage implements IStorage {
@@ -66,6 +70,31 @@ export class MemStorage implements IStorage {
     };
     this.assessments.set(id, assessment);
     return assessment;
+  }
+
+  async trackCareerExploration(userId: string, careerTitle: string): Promise<void> {
+    // In-memory storage doesn't persist tracking data
+    console.log(`Tracked career exploration: ${userId} - ${careerTitle}`);
+  }
+
+  async trackARPreview(userId: string, careerTitle: string): Promise<void> {
+    // In-memory storage doesn't persist tracking data
+    console.log(`Tracked AR preview: ${userId} - ${careerTitle}`);
+  }
+
+  async getPlatformMetrics(): Promise<any> {
+    const assessments = Array.from(this.assessments.values());
+    const averageScore = assessments.length > 0 
+      ? Math.round(assessments.reduce((sum, a) => sum + a.matchScore, 0) / assessments.length)
+      : 0;
+
+    return {
+      studentsHelped: assessments.length,
+      careersExplored: 0,
+      arPreviewsCompleted: 0,
+      averageMatchScore: averageScore,
+      lastUpdated: new Date(),
+    };
   }
 }
 
