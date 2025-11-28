@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import heroImage from "@assets/generated_images/hero_section_ar_student_illustration.png";
 import arDemoImage from "@assets/generated_images/ar_demo_interface_mockup.png";
-import logoImage from "@assets/Dream_1764357537158.png";
+import logoImage from "@assets/Dream-removebg-preview_1764357777787.png";
 
 export default function Landing() {
   const [, setLocation] = useLocation();
