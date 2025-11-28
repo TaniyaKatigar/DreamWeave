@@ -293,18 +293,26 @@ export default function Results() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Industry Trends & Outlook {metricsLoading && <span className="text-xs text-muted-foreground ml-2">(AI-powered)</span>}</CardTitle>
+              <CardTitle>Career Fit Overview {metricsLoading && <span className="text-xs text-muted-foreground ml-2">(AI-powered)</span>}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground leading-relaxed">
-                {industryTrends}
-              </p>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-sm font-semibold mb-2">Industry Insights</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {industryTrends}
+                </p>
+              </div>
               {metricsData?.careerFitAnalysis && (
-                <div className="mt-4 pt-4 border-t">
-                  <p className="text-sm font-semibold mb-2">Career Fit Analysis</p>
-                  <p className="text-sm text-muted-foreground">
-                    {metricsData.careerFitAnalysis}
-                  </p>
+                <div className="pt-4 border-t">
+                  <p className="text-sm font-semibold mb-3">Why This Career Fits You</p>
+                  <ul className="space-y-2">
+                    {metricsData.careerFitAnalysis.split('\n').filter((line: string) => line.trim()).map((point: string, idx: number) => (
+                      <li key={idx} className="text-sm text-muted-foreground flex gap-2">
+                        <span className="text-primary font-semibold flex-shrink-0">•</span>
+                        <span>{point.trim().replace(/^[-•]\s*/, '')}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </CardContent>
