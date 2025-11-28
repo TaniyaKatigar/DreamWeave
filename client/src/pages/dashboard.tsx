@@ -217,9 +217,8 @@ export default function Dashboard() {
                 </div>
 
                 <Button 
-                  variant="outline" 
                   size="sm" 
-                  className="w-full mt-auto"
+                  className="w-full mt-auto bg-blue-600 text-white hover:bg-blue-700"
                   data-testid={`button-explore-${career.id}`}
                 >
                   Explore <ArrowRight className="ml-2 w-3 h-3" />

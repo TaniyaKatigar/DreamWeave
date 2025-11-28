@@ -89,65 +89,52 @@ export default function Landing() {
 
       <section className="relative overflow-hidden py-20 md:py-32">
         <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid md:grid-cols-2 gap-12 items-start">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
-                Experience Your Future Career
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                Make informed career decisions with immersive WebAR workplace previews and AI-powered matching. 
-                Discover your ideal path in just 6 minutes.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg" 
-                  className="text-lg px-8 py-6"
-                  onClick={() => setLocation("/quiz")}
-                  data-testid="button-start-quiz-hero"
-                >
-                  Get Started
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="text-lg px-8 py-6"
-                  onClick={() => setLocation("/browse-careers")}
-                  data-testid="button-try-ar-careers"
-                >
-                  <Eye className="mr-2 h-5 w-5" />
-                  Try AR Previews
-                </Button>
+              <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+                <div className="flex-1 space-y-8">
+                  <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
+                    Experience Your Future Career
+                  </h1>
+                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                    Make informed career decisions with immersive WebAR workplace previews and AI-powered matching. 
+                    Discover your ideal path in just 6 minutes.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button 
+                      size="lg" 
+                      className="text-lg px-8 py-6"
+                      onClick={() => setLocation("/quiz")}
+                      data-testid="button-start-quiz-hero"
+                    >
+                      Get Started
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                    <Button 
+                      size="lg" 
+                      variant="outline" 
+                      className="text-lg px-8 py-6"
+                      onClick={() => setLocation("/browse-careers")}
+                      data-testid="button-try-ar-careers"
+                    >
+                      <Eye className="mr-2 h-5 w-5" />
+                      Try AR Previews
+                    </Button>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Free • No credit card • 6-minute quiz
+                  </p>
+                </div>
+                <img 
+                  src={heroImage} 
+                  alt="Student experiencing AR career preview" 
+                  className="w-48 h-48 md:w-56 md:h-56 rounded-2xl flex-shrink-0"
+                />
               </div>
-              <p className="text-sm text-muted-foreground">
-                Free • No credit card • 6-minute quiz
-              </p>
-            </div>
-            <div className="w-full flex flex-col gap-4">
-              <div className="relative w-full h-96 rounded-2xl overflow-hidden" style={{ '--spline-hide-attribution': 'true' } as any}>
-                <Spline scene="https://prod.spline.design/A4PVuTD66H0Yoe3b/scene.splinecode" />
-              </div>
-              <img 
-                src={heroImage} 
-                alt="Student experiencing AR career preview" 
-                className="w-full h-auto rounded-2xl"
-              />
             </div>
           </div>
         </div>
       </section>
-      
-      <style>{`
-        iframe[title*="Spline"] {
-          border: none !important;
-        }
-        .spline-container {
-          display: none !important;
-        }
-        .spline-attribution {
-          display: none !important;
-        }
-      `}</style>
 
       <section className="py-16 md:py-20 bg-muted/30">
         <div className="container mx-auto px-6 max-w-7xl">
