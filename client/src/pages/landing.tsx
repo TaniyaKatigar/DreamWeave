@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,18 +11,17 @@ import heroImage from "@assets/generated_images/hero_section_ar_student_illustra
 import arDemoImage from "@assets/generated_images/ar_demo_interface_mockup.png";
 import logoImage from "@assets/Dream__1_-removebg-preview_1764358132723.png";
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'spline-viewer': any;
-    }
-  }
-}
-
 export default function Landing() {
   const [, setLocation] = useLocation();
   const { user, signOut } = useAuth();
   const { toast } = useToast();
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/@splinetool/viewer@1.0.0/build/spline-viewer.js';
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   const handleSignOut = async () => {
     try {
@@ -130,13 +130,12 @@ export default function Landing() {
                 Free • No credit card • 6-minute quiz
               </p>
             </div>
-            <div className="relative">
-              <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.5/build/spline-viewer.js"></script>
-              <spline-viewer url="https://prod.spline.design/eymprUNWavNDO4bB/scene.splinecode"></spline-viewer>
+            <div className="relative h-96">
+              <spline-viewer url="https://prod.spline.design/eymprUNWavNDO4bB/scene.splinecode" className="absolute inset-0 w-full h-full rounded-2xl" style={{ zIndex: 0 }}></spline-viewer>
               <img 
                 src={heroImage} 
                 alt="Student experiencing AR career preview" 
-                className="w-full h-auto rounded-2xl"
+                className="w-full h-auto rounded-2xl relative z-10"
               />
             </div>
           </div>
