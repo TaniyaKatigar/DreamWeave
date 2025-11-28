@@ -6,7 +6,6 @@ import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { ProfileDropdown } from "@/components/profile-dropdown";
-import Spline from '@splinetool/react-spline';
 import heroImage from "@assets/generated_images/hero_section_ar_student_illustration.png";
 import arDemoImage from "@assets/generated_images/ar_demo_interface_mockup.png";
 import logoImage from "@assets/Dream__1_-removebg-preview_1764358132723.png";
@@ -128,7 +127,7 @@ export default function Landing() {
                 <img 
                   src={heroImage} 
                   alt="Student experiencing AR career preview" 
-                  className="w-48 h-48 md:w-56 md:h-56 rounded-2xl flex-shrink-0"
+                  className="w-72 h-72 md:w-96 md:h-96 rounded-2xl flex-shrink-0"
                 />
               </div>
             </div>
