@@ -125,13 +125,8 @@ export default function Landing() {
             </div>
             <div className="relative h-96 rounded-2xl overflow-hidden flex items-center justify-center">
               <div className="absolute w-full h-full">
-                <Spline scene="https://prod.spline.design/eymprUNWavNDO4bB/scene.splinecode" />
+                <Spline scene="https://prod.spline.design/A4PVuTD66H0Yoe3b/scene.splinecode" />
               </div>
-              <img 
-                src={heroImage} 
-                alt="Student experiencing AR career preview" 
-                className="w-56 h-56 object-cover rounded-2xl relative z-20"
-              />
             </div>
           </div>
         </div>
