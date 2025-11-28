@@ -202,6 +202,7 @@ export const careers: Career[] = [
     requiredSkills: ["Programming", "Problem Solving", "Logical Thinking", "Collaboration"],
     personalityTraits: ["Analytical", "Detail-oriented", "Patient", "Independent"],
     industryTrends: "AI/ML integration, cloud computing, cybersecurity - high demand expected through 2030",
+    workspace3dModel: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
   },
   {
     id: "ux-designer",
@@ -215,6 +216,7 @@ export const careers: Career[] = [
     requiredSkills: ["Visual Design", "User Research", "Prototyping", "Communication"],
     personalityTraits: ["Creative", "Empathetic", "Collaborative", "Curious"],
     industryTrends: "Growing demand for mobile-first and accessible design, AI-assisted design tools emerging",
+    workspace3dModel: "https://modelviewer.dev/shared-assets/models/CesiumMan.glb",
   },
   {
     id: "data-scientist",
@@ -228,6 +230,7 @@ export const careers: Career[] = [
     requiredSkills: ["Statistics", "Programming", "Machine Learning", "Data Visualization"],
     personalityTraits: ["Analytical", "Methodical", "Curious", "Independent"],
     industryTrends: "Explosive growth in AI/ML applications, highest demand in finance, healthcare, and tech sectors",
+    workspace3dModel: "https://modelviewer.dev/shared-assets/models/RobotExpressive.glb",
   },
   {
     id: "healthcare-professional",
@@ -241,6 +244,7 @@ export const careers: Career[] = [
     requiredSkills: ["Medical Knowledge", "Empathy", "Communication", "Problem Solving"],
     personalityTraits: ["Compassionate", "Resilient", "Detail-oriented", "Collaborative"],
     industryTrends: "Telemedicine expansion, aging population driving demand, emphasis on preventive care",
+    workspace3dModel: "https://modelviewer.dev/shared-assets/models/DamagedHelmet.glb",
   },
   {
     id: "teacher",
@@ -252,6 +256,7 @@ export const careers: Career[] = [
     stressIndex: 71,
     mismatchProbability: 25,
     requiredSkills: ["Communication", "Patience", "Subject Expertise", "Creativity"],
+    workspace3dModel: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
     personalityTraits: ["Patient", "Empathetic", "Organized", "Passionate"],
     industryTrends: "EdTech integration, personalized learning approaches, hybrid teaching models becoming standard",
   },
