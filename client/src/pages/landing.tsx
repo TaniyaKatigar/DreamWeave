@@ -371,7 +371,7 @@ export default function Landing() {
             onClick={() => setLocation("/quiz")}
             data-testid="button-start-quiz-cta"
           >
-            Start Career Quiz
+            Get started
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           <p className="text-sm opacity-75">Free • No credit card • 6-minute quiz</p>
