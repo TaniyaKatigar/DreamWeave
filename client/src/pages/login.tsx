@@ -7,6 +7,7 @@ import { Sparkles, Mail, Lock, AlertCircle } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/hooks/use-toast";
+import googleLogoUrl from "@assets/image_1764335543800.png";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -109,7 +110,7 @@ export default function Login() {
             data-testid="button-signin-google"
           >
             <img 
-              src="https://www.gstatic.com/images/branding/product/1x/googleg_standard_color_128dp.png" 
+              src={googleLogoUrl}
               alt="Google" 
               className="h-5 w-5"
             />
