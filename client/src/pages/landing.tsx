@@ -55,30 +55,30 @@ export default function Landing() {
     },
   ];
 
-
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-        <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <div className="flex items-center gap-2 ml-0">
-            <img src={logoImage} alt="DreamWeave" className="h-40 ml-0" />
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
+        <div className="container mx-auto flex h-20 items-center justify-between px-8">
+          <div className="flex items-center gap-3">
+            <img src={logoImage} alt="DreamWeave" className="h-30 w-40" />
           </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="#how-it-works" className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors">
               How It Works
             </a>
-            <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#features" className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors">
               Features
             </a>
             {user ? (
-              <>
-                <Button variant="outline" size="sm" onClick={() => setLocation("/browse-careers")} data-testid="button-browse-careers-nav">
-                  Browse all careers
+              <div className="flex items-center gap-4">
+                <Button variant="outline" size="lg" onClick={() => setLocation("/browse-careers")} className="h-12 px-6" data-testid="button-browse-careers-nav">
+                  Browse All Careers
                 </Button>
                 <ProfileDropdown />
-              </>
+              </div>
             ) : (
-              <Button variant="outline" size="sm" onClick={() => setLocation("/login")} data-testid="button-signin-nav">
+              <Button variant="outline" size="lg" onClick={() => setLocation("/login")} className="h-12 px-6" data-testid="button-signin-nav">
                 Sign In
               </Button>
             )}
@@ -86,128 +86,144 @@ export default function Landing() {
         </div>
       </header>
 
-      <section className="relative overflow-hidden py-20 md:py-32">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
-                <div className="flex-1 space-y-8">
-                  <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
-                    Experience Your Future Career
-                  </h1>
-                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    Make informed career decisions with immersive WebAR workplace previews and AI-powered matching. 
-                    Discover your ideal path in just 6 minutes.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Button 
-                      size="lg" 
-                      className="text-lg px-8 py-6"
-                      onClick={() => setLocation("/quiz")}
-                      data-testid="button-start-quiz-hero"
-                    >
-                      Get Started
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                    <Button 
-                      size="lg" 
-                      variant="outline" 
-                      className="text-lg px-8 py-6"
-                      onClick={() => setLocation("/browse-careers")}
-                      data-testid="button-try-ar-careers"
-                    >
-                      <Eye className="mr-2 h-5 w-5" />
-                      Try AR Previews
-                    </Button>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Free • No credit card • 6-minute quiz
-                  </p>
+      {/* Hero Section */}
+      <section className="relative overflow-hidden py-24 md:py-32 bg-gradient-to-br from-background via-background to-muted/20">
+        <div className="container mx-auto px-8 max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-10">
+              <div className="space-y-8">
+                <h1 className="text-5xl md:text-7xl font-bold leading-tight tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                  Experience Your Future Career
+                </h1>
+                <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
+                  Make informed career decisions with immersive WebAR workplace previews and AI-powered matching. 
+                  Discover your ideal path in just 6 minutes.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-6">
+                  <Button 
+                    size="lg" 
+                    className="h-16 text-lg px-10 py-6 font-semibold"
+                    onClick={() => setLocation("/quiz")}
+                    data-testid="button-start-quiz-hero"
+                  >
+                    Start Career Assessment
+                    <ArrowRight className="ml-3 h-6 w-6" />
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="h-16 text-lg px-10 py-6 font-semibold border-2"
+                    onClick={() => setLocation("/browse-careers")}
+                    data-testid="button-try-ar-careers"
+                  >
+                    <Eye className="mr-3 h-6 w-6" />
+                    Try AR Previews
+                  </Button>
                 </div>
-                <img 
-                  src={heroImage} 
-                  alt="Student experiencing AR career preview" 
-                  className="w-full h-auto md:w-full md:h-auto rounded-2xl flex-shrink-0"
-                />
+                <div className="flex items-center gap-6 text-base text-muted-foreground">
+                  <Badge variant="outline" className="text-sm px-4 py-2">Free Forever</Badge>
+                  <Badge variant="outline" className="text-sm px-4 py-2">6-Minute Quiz</Badge>
+                  <Badge variant="outline" className="text-sm px-4 py-2">No Credit Card</Badge>
+                </div>
               </div>
+            </div>
+            <div className="flex justify-center">
+              <img 
+                src={heroImage} 
+                alt="Student experiencing AR career preview" 
+                className="w-full max-w-2xl h-auto rounded-3xl shadow-2xl border-2"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-muted/30">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-semibold">The Problem</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+      {/* Problem Section */}
+      <section className="py-20 md:py-28 bg-muted/30">
+        <div className="container mx-auto px-8 max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8">
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight">The Career Choice Crisis</h2>
+              <p className="text-xl text-muted-foreground leading-relaxed">
                 Too many students choose careers based on assumptions, family pressure, or generic tests. 
                 This leads to dissatisfaction, dropouts, and wasted years.
               </p>
-              <div className="grid grid-cols-3 gap-4 pt-4">
-                <Card className="p-6">
-                  <CardContent className="p-0 space-y-2">
-                    <div className="text-4xl font-bold text-primary">67%</div>
-                    <div className="text-sm text-muted-foreground">Career Mismatch</div>
+              <div className="grid grid-cols-3 gap-6 pt-6">
+                <Card className="p-8 border-2 text-center">
+                  <CardContent className="p-0 space-y-3">
+                    <div className="text-5xl font-bold text-primary">67%</div>
+                    <div className="text-base font-medium text-muted-foreground">Career Mismatch</div>
                   </CardContent>
                 </Card>
-                <Card className="p-6">
-                  <CardContent className="p-0 space-y-2">
-                    <div className="text-4xl font-bold text-primary">42%</div>
-                    <div className="text-sm text-muted-foreground">College Dropouts</div>
+                <Card className="p-8 border-2 text-center">
+                  <CardContent className="p-0 space-y-3">
+                    <div className="text-5xl font-bold text-primary">42%</div>
+                    <div className="text-base font-medium text-muted-foreground">College Dropouts</div>
                   </CardContent>
                 </Card>
-                <Card className="p-6">
-                  <CardContent className="p-0 space-y-2">
-                    <div className="text-4xl font-bold text-primary">53%</div>
-                    <div className="text-sm text-muted-foreground">Employability Gap</div>
+                <Card className="p-8 border-2 text-center">
+                  <CardContent className="p-0 space-y-3">
+                    <div className="text-5xl font-bold text-primary">53%</div>
+                    <div className="text-base font-medium text-muted-foreground">Employability Gap</div>
                   </CardContent>
                 </Card>
               </div>
             </div>
-            <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
-              <p>
-                Traditional career counseling lacks <strong className="text-foreground">experiential understanding</strong>. 
-                Students can't visualize what a role actually involves.
-              </p>
-              <p>
-                Generic aptitude tests ignore <strong className="text-foreground">personality fit</strong> and 
-                provide no insight into <strong className="text-foreground">future outcomes</strong>.
-              </p>
-              <p>
-                DreamWeave bridges this gap with immersive AR previews and predictive AI matching.
-              </p>
+            <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
+              <div className="flex gap-4 items-start">
+                <div className="w-3 h-3 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                <p>
+                  Traditional career counseling lacks <strong className="text-foreground font-semibold">experiential understanding</strong>. 
+                  Students can't visualize what a role actually involves.
+                </p>
+              </div>
+              <div className="flex gap-4 items-start">
+                <div className="w-3 h-3 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                <p>
+                  Generic aptitude tests ignore <strong className="text-foreground font-semibold">personality fit</strong> and 
+                  provide no insight into <strong className="text-foreground font-semibold">future outcomes</strong>.
+                </p>
+              </div>
+              <div className="flex gap-4 items-start">
+                <div className="w-3 h-3 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                <p>
+                  DreamWeave bridges this gap with immersive AR previews and predictive AI matching.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="how-it-works" className="py-16 md:py-20">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-4xl font-semibold">How It Works</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Three simple steps to discover your ideal career path
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-20 md:py-28">
+        <div className="container mx-auto px-8 max-w-7xl">
+          <div className="text-center space-y-6 mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">How It Works</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Three simple steps to discover your ideal career path with confidence
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-12">
             {[
-              { step: "01", title: "Take Quiz", desc: "Answer 6 questions about your interests, skills, and personality" },
-              { step: "02", title: "Explore AR", desc: "View immersive workplace previews through your phone camera" },
-              { step: "03", title: "Get Insights", desc: "Receive personalized career recommendations and future projections" },
+              { step: "01", title: "Take Assessment", desc: "Answer 6 insightful questions about your interests, skills, and personality traits" },
+              { step: "02", title: "Explore AR Previews", desc: "View immersive workplace environments through your smartphone camera" },
+              { step: "03", title: "Get AI Insights", desc: "Receive personalized career recommendations with future projections" },
             ].map((item, idx) => (
               <div key={idx} className="relative">
-                <Card className="p-8 h-full hover-elevate transition-all duration-300">
-                  <CardContent className="p-0 space-y-4">
-                    <div className="w-32 h-32 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-5xl font-bold text-primary">{item.step}</span>
+                <Card className="p-10 h-full hover:shadow-2xl hover:scale-105 transition-all duration-300 border-2">
+                  <CardContent className="p-0 space-y-8 text-center">
+                    <div className="w-40 h-40 mx-auto rounded-full bg-primary/10 flex items-center justify-center border-4 border-primary/20">
+                      <span className="text-6xl font-bold text-primary">{item.step}</span>
                     </div>
-                    <h3 className="text-xl font-semibold text-center">{item.title}</h3>
-                    <p className="text-muted-foreground text-center leading-relaxed">{item.desc}</p>
+                    <div className="space-y-4">
+                      <h3 className="text-2xl font-bold">{item.title}</h3>
+                      <p className="text-muted-foreground text-lg leading-relaxed">{item.desc}</p>
+                    </div>
                   </CardContent>
                 </Card>
                 {idx < 2 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-0.5 bg-border" />
+                  <div className="hidden lg:block absolute top-1/2 -right-6 w-12 h-1 bg-border transform -translate-y-1/2" />
                 )}
               </div>
             ))}
@@ -215,25 +231,28 @@ export default function Landing() {
         </div>
       </section>
 
-      <section id="features" className="py-16 md:py-20 bg-muted/30">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-4xl font-semibold">Features</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to make confident career decisions
+      {/* Features Section */}
+      <section id="features" className="py-20 md:py-28 bg-muted/30">
+        <div className="container mx-auto px-8 max-w-7xl">
+          <div className="text-center space-y-6 mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Powerful Features</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Everything you need to make confident, informed career decisions
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, idx) => {
               const Icon = feature.icon;
               return (
-                <Card key={idx} className="p-6 hover-elevate transition-all duration-300">
-                  <CardContent className="p-0 space-y-4">
-                    <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Icon className="h-8 w-8 text-primary" />
+                <Card key={idx} className="p-8 hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 h-full">
+                  <CardContent className="p-0 space-y-6">
+                    <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center">
+                      <Icon className="h-10 w-10 text-primary" />
                     </div>
-                    <h3 className="text-xl font-semibold">{feature.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-bold leading-tight">{feature.title}</h3>
+                      <p className="text-muted-foreground leading-relaxed text-base">{feature.description}</p>
+                    </div>
                   </CardContent>
                 </Card>
               );
@@ -242,69 +261,86 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <img 
-              src={arDemoImage} 
-              alt="AR interface demo" 
-              className="w-full h-auto rounded-2xl"
-            />
-            <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-semibold">WebAR Preview Demo</h2>
-              <ul className="space-y-4">
-                <li className="flex gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-primary" />
+      {/* AR Demo Section */}
+      <section className="py-20 md:py-28">
+        <div className="container mx-auto px-8 max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="flex justify-center">
+              <img 
+                src={arDemoImage} 
+                alt="AR interface demo" 
+                className="w-full max-w-2xl h-auto rounded-3xl shadow-2xl border-2"
+              />
+            </div>
+            <div className="space-y-8">
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Immersive WebAR Experience</h2>
+              <div className="space-y-6">
+                <div className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-3 h-3 rounded-full bg-primary" />
                   </div>
-                  <p className="text-muted-foreground">View realistic 3D workplace environments directly through your phone</p>
-                </li>
-                <li className="flex gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-primary" />
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    View realistic 3D workplace environments directly through your smartphone camera
+                  </p>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-3 h-3 rounded-full bg-primary" />
                   </div>
-                  <p className="text-muted-foreground">Interact with tools and equipment used in different careers</p>
-                </li>
-                <li className="flex gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-primary" />
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Interact with tools and equipment used in different professional careers
+                  </p>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-3 h-3 rounded-full bg-primary" />
                   </div>
-                  <p className="text-muted-foreground">Experience before you commit to years of education</p>
-                </li>
-              </ul>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Experience career environments before committing to years of education and training
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-
+      {/* CTA Section */}
       <section className="py-24 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-6 max-w-4xl text-center space-y-8">
-          <h2 className="text-3xl md:text-5xl font-bold">Ready to discover your ideal career?</h2>
-          <p className="text-lg md:text-xl opacity-90">
-            Join thousands of students making informed career decisions with DreamWeave
+        <div className="container mx-auto px-8 max-w-5xl text-center space-y-10">
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Ready to Discover Your Ideal Career?</h2>
+          <p className="text-xl md:text-2xl opacity-90 leading-relaxed max-w-3xl mx-auto">
+            Join thousands of students making informed career decisions with DreamWeave's immersive technology
           </p>
           <Button 
             size="lg" 
             variant="outline" 
-            className="text-lg px-8 py-6 bg-background text-foreground hover:bg-background/90"
+            className="h-16 text-lg px-12 py-6 font-semibold bg-background text-foreground hover:bg-background/90 border-2"
             onClick={() => setLocation("/quiz")}
             data-testid="button-start-quiz-cta"
           >
-            Get started
-            <ArrowRight className="ml-2 h-5 w-5" />
+            Start Your Journey Today
+            <ArrowRight className="ml-3 h-6 w-6" />
           </Button>
-          <p className="text-sm opacity-75">Free • No credit card • 6-minute quiz</p>
+          <div className="flex justify-center gap-6 text-base opacity-75">
+            <span>Free Forever</span>
+            <span>•</span>
+            <span>6-Minute Assessment</span>
+            <span>•</span>
+            <span>No Credit Card Required</span>
+          </div>
         </div>
       </section>
 
-      <footer className="border-t py-12">
-        <div className="container mx-auto px-6 max-w-7xl text-center">
-          <div className="flex items-center justify-center mb-4">
-            <img src={logoImage} alt="DreamWeave" className="h-52" />
+      {/* Footer */}
+      <footer className="border-t py-16 bg-background">
+        <div className="container mx-auto px-8 max-w-7xl text-center">
+          <div className="flex items-center justify-center mb-8">
+            <img src={logoImage} alt="DreamWeave" className="h-34 w-36" />
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            Transforming career counseling with immersive WebAR technology and AI-powered insights.
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+            Transforming career counseling with immersive WebAR technology and AI-powered insights. 
+            Helping students make confident decisions about their future.
           </p>
         </div>
       </footer>

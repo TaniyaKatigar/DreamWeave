@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import { type User, type InsertUser, type Assessment, type InsertAssessment } from "@shared/schema";
+import { type User, type InsertUser, type Assessment, type InsertAssessment, type QuizAnswer } from "@shared/schema";
 
 // Initialize Firebase Admin
 let adminDb: admin.firestore.Firestore | null = null;
@@ -74,11 +74,11 @@ export class FirestoreAdminStorage {
         const data = doc.data();
         return {
           id: doc.id,
-          email: data.email ?? null,
-          displayName: data.displayName ?? null,
-          photoURL: data.photoURL ?? null,
-          firebaseUid: data.firebaseUid ?? null,
-          createdAt: data.createdAt?.toDate() ?? new Date(),
+          email: data?.email ?? null,
+          displayName: data?.displayName ?? null,
+          photoURL: data?.photoURL ?? null,
+          firebaseUid: data?.firebaseUid ?? null,
+          createdAt: data?.createdAt?.toDate() ?? new Date(),
         };
       }
     } catch (error) {
@@ -95,7 +95,7 @@ export class FirestoreAdminStorage {
         displayName: user.displayName ?? null,
         photoURL: user.photoURL ?? null,
         firebaseUid: user.firebaseUid ?? null,
-        createdAt: admin.firestore.Timestamp.now(),
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
       };
       const userRef = await adminDb.collection("users").add(userData);
       console.log("✅ User created in Firestore:", userRef.id);
@@ -119,7 +119,7 @@ export class FirestoreAdminStorage {
         return {
           id: assessmentDoc.id,
           userId: data?.userId ?? null,
-          answers: data?.answers,
+          answers: data?.answers as QuizAnswer[],
           topCareer: data?.topCareer,
           matchScore: data?.matchScore,
           createdAt: data?.createdAt?.toDate() ?? new Date(),
@@ -143,11 +143,11 @@ export class FirestoreAdminStorage {
         const data = doc.data();
         return {
           id: doc.id,
-          userId: data.userId ?? null,
-          answers: data.answers,
-          topCareer: data.topCareer,
-          matchScore: data.matchScore,
-          createdAt: data.createdAt?.toDate() ?? new Date(),
+          userId: data?.userId ?? null,
+          answers: data?.answers as QuizAnswer[],
+          topCareer: data?.topCareer,
+          matchScore: data?.matchScore,
+          createdAt: data?.createdAt?.toDate() ?? new Date(),
         };
       });
       
@@ -169,7 +169,7 @@ export class FirestoreAdminStorage {
         answers: assessment.answers,
         topCareer: assessment.topCareer,
         matchScore: assessment.matchScore,
-        createdAt: admin.firestore.Timestamp.now(),
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
       };
       
       const assessmentRef = await adminDb.collection("assessments").add(assessmentData);
@@ -192,7 +192,7 @@ export class FirestoreAdminStorage {
       const explorationData = {
         userId,
         careerTitle,
-        timestamp: admin.firestore.Timestamp.now(),
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
       };
       await adminDb.collection("careerExplorations").add(explorationData);
       console.log(`✅ Tracked career exploration: ${careerTitle}`);
@@ -207,7 +207,7 @@ export class FirestoreAdminStorage {
       const arData = {
         userId,
         careerTitle,
-        timestamp: admin.firestore.Timestamp.now(),
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
       };
       await adminDb.collection("arPreviews").add(arData);
       console.log(`✅ Tracked AR preview: ${careerTitle}`);
@@ -233,7 +233,7 @@ export class FirestoreAdminStorage {
       const assessments = assessmentsSnapshot.docs.map((doc) => doc.data());
       const averageScore =
         assessments.length > 0
-          ? Math.round(assessments.reduce((sum, a) => sum + a.matchScore, 0) / assessments.length)
+          ? Math.round(assessments.reduce((sum: number, a: any) => sum + a.matchScore, 0) / assessments.length)
           : 0;
 
       const uniqueCareers = new Set(

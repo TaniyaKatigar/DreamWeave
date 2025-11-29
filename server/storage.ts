@@ -100,6 +100,6 @@ export class MemStorage implements IStorage {
 }
 
 // Use Firebase Admin Firestore first, then fall back to in-memory
-const storage: IStorage = firestoreAdminStorage;
+const storage: IStorage = new MemStorage();
 
 export { storage };

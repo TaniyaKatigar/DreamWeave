@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Loader2 } from "lucide-react";
-import { Sparkles, ArrowRight, Download, TrendingUp, DollarSign, Activity, Brain } from "lucide-react";
+import { Sparkles, ArrowRight, Download, TrendingUp, DollarSign, Activity, Brain, Eye, Home } from "lucide-react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import type { CareerMatchResponse, QuizAnswer } from "@shared/schema";
@@ -86,15 +86,27 @@ export default function Results() {
 
   if (isLoading || !matchResults || metricsLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/10 flex items-center justify-center p-8">
         <div className="w-full fixed top-0 left-0 z-50">
-          <Progress value={progress} className="h-1 rounded-none" />
+          <Progress value={progress} className="h-2 rounded-none" />
         </div>
-        <div className="text-center space-y-4">
-          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto" />
-          <p className="text-lg text-muted-foreground">
-            {isLoading || !matchResults ? "Analyzing your responses..." : "Loading career insights..."}
-          </p>
+        <div className="text-center space-y-8 max-w-md">
+          <div className="space-y-4">
+            <Loader2 className="w-16 h-16 text-primary animate-spin mx-auto" />
+            <div className="space-y-2">
+              <p className="text-2xl font-semibold text-foreground">
+                {isLoading || !matchResults ? "Analyzing Your Responses" : "Generating Career Insights"}
+              </p>
+              <p className="text-lg text-muted-foreground">
+                {isLoading || !matchResults 
+                  ? "Processing your quiz answers with our AI matching algorithm..." 
+                  : "Fetching real-time career metrics and industry trends..."}
+              </p>
+            </div>
+          </div>
+          <div className="text-sm text-muted-foreground">
+            {Math.round(progress)}% Complete
+          </div>
         </div>
       </div>
     );
@@ -130,8 +142,8 @@ export default function Results() {
     try {
       generateCareerReport(topMatch);
       toast({
-        title: "Report Downloaded",
-        description: "Your career report has been generated successfully.",
+        title: "Report Downloaded Successfully!",
+        description: "Your comprehensive career report has been generated and saved.",
       });
     } catch (error) {
       toast({
@@ -153,181 +165,223 @@ export default function Results() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="w-full border-b bg-background sticky top-0 z-10">
-        <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">DreamWeave</span>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/10">
+      {/* Header */}
+      <header className="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10 shadow-sm">
+        <div className="container mx-auto flex h-20 items-center justify-between px-8">
+          <div className="flex items-center gap-3">
+            <Sparkles className="h-8 w-8 text-primary" />
+            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              DreamWeave
+            </span>
           </div>
-          <Button variant="ghost" onClick={() => setLocation("/")} data-testid="button-home">
-            Home
+          <Button 
+            variant="ghost" 
+            onClick={() => setLocation("/")} 
+            className="h-12 px-6 text-base hover:bg-accent"
+            data-testid="button-home"
+          >
+            <Home className="mr-3 h-5 w-5" />
+            Back to Home
           </Button>
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-12 max-w-4xl">
-        <div className="space-y-8">
-          {career.image && (
-            <div className="w-full h-64 rounded-lg overflow-hidden border border-border">
-              <img 
-                src={career.image} 
-                alt={career.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
-          
-          <div className="text-center space-y-4">
-            <Badge variant="outline" className="text-sm">
-              Your Career Match Results
+      {/* Main Content */}
+      <div className="container mx-auto px-8 py-12 max-w-6xl">
+        <div className="space-y-12">
+          {/* Hero Section */}
+          <div className="text-center space-y-8">
+            <Badge variant="outline" className="text-base px-6 py-3 border-2">
+              🎉 Your Career Match Results
             </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold">
-              {career.title}
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {career.description}
-            </p>
+            
+            {career.image && (
+              <div className="w-full max-w-4xl mx-auto h-80 rounded-2xl overflow-hidden border-2 shadow-xl">
+                <img 
+                  src={career.image} 
+                  alt={career.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            
+            <div className="space-y-6">
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                {career.title}
+              </h1>
+              <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+                {career.description}
+              </p>
+            </div>
           </div>
 
-          <Card className="p-8">
-            <CardContent className="p-0 space-y-8">
-              <div className="flex items-center justify-center">
-                <div className="relative w-48 h-48">
+          {/* Main Match Card */}
+          <Card className="border-2 shadow-2xl">
+            <CardContent className="p-10 space-y-12">
+              {/* Match Score Visualization */}
+              <div className="flex flex-col items-center space-y-8">
+                <div className="relative w-64 h-64">
                   <svg className="w-full h-full transform -rotate-90">
                     <circle
-                      cx="96"
-                      cy="96"
-                      r="88"
+                      cx="128"
+                      cy="128"
+                      r="116"
                       stroke="currentColor"
                       strokeWidth="8"
                       fill="none"
                       className="text-muted"
                     />
                     <circle
-                      cx="96"
-                      cy="96"
-                      r="88"
+                      cx="128"
+                      cy="128"
+                      r="116"
                       stroke="currentColor"
                       strokeWidth="8"
                       fill="none"
-                      strokeDasharray={`${2 * Math.PI * 88}`}
-                      strokeDashoffset={`${2 * Math.PI * 88 * (1 - topMatch.matchScore / 100)}`}
+                      strokeDasharray={`${2 * Math.PI * 116}`}
+                      strokeDashoffset={`${2 * Math.PI * 116 * (1 - topMatch.matchScore / 100)}`}
                       className="text-primary transition-all duration-1000"
                     />
                   </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <div className="text-5xl font-bold text-primary" data-testid="match-score">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center space-y-2">
+                    <div className="text-6xl font-bold text-primary" data-testid="match-score">
                       {topMatch.matchScore}%
                     </div>
-                    <div className="text-sm text-muted-foreground">Match Score</div>
+                    <div className="text-lg font-semibold text-muted-foreground">Overall Match Score</div>
                   </div>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <DollarSign className="h-4 w-4" />
-                    <span>Salary Range</span>
-                  </div>
-                  <div className="text-2xl font-semibold" data-testid="salary-range">
-                    {formatSalary(salaryRange.min, salaryRange.max)}
-                  </div>
-                  <p className="text-sm text-muted-foreground">Annual (₹ Lakhs)</p>
-                </div>
+              {/* Key Metrics Grid */}
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card className="border-2 p-1">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <DollarSign className="h-7 w-7 text-primary" />
+                      <span className="font-semibold text-lg">Salary Range</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-3xl font-bold text-primary" data-testid="salary-range">
+                        {formatSalary(salaryRange.min)} - {formatSalary(salaryRange.max)}
+                      </div>
+                      <p className="text-base text-muted-foreground">Annual (₹ Lakhs)</p>
+                    </div>
+                  </CardContent>
+                </Card>
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <TrendingUp className="h-4 w-4" />
-                    <span>Growth Potential</span>
-                  </div>
-                  <Progress value={growthPotential} className="h-3" />
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-semibold">{growthPotential}%</span>
-                    <span className="text-muted-foreground">Excellent</span>
-                  </div>
-                </div>
+                <Card className="border-2 p-1">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <TrendingUp className="h-7 w-7 text-primary" />
+                      <span className="font-semibold text-lg">Growth Potential</span>
+                    </div>
+                    <div className="space-y-3">
+                      <Progress value={growthPotential} className="h-3" />
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold text-primary">{growthPotential}%</span>
+                        <Badge variant="outline" className="text-sm">
+                          {growthPotential > 85 ? "Excellent" : growthPotential > 70 ? "Good" : "Moderate"}
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Activity className="h-4 w-4" />
-                    <span>Stress Index</span>
-                  </div>
-                  <Progress value={stressIndex} className="h-3" />
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-semibold">{stressIndex}%</span>
-                    <span className="text-muted-foreground">
-                      {stressIndex < 50 ? "Low" : stressIndex < 75 ? "Moderate" : "High"}
-                    </span>
-                  </div>
-                </div>
+                <Card className="border-2 p-1">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Activity className="h-7 w-7 text-primary" />
+                      <span className="font-semibold text-lg">Stress Index</span>
+                    </div>
+                    <div className="space-y-3">
+                      <Progress value={stressIndex} className="h-3" />
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold text-primary">{stressIndex}%</span>
+                        <Badge variant="outline" className="text-sm">
+                          {stressIndex < 50 ? "Low" : stressIndex < 75 ? "Moderate" : "High"}
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Brain className="h-4 w-4" />
-                    <span>Mismatch Risk</span>
+                <Card className="border-2 p-1">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Brain className="h-7 w-7 text-primary" />
+                      <span className="font-semibold text-lg">Mismatch Risk</span>
+                    </div>
+                    <div className="space-y-3">
+                      <Progress value={mismatchProbability} className="h-3" />
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold text-primary">{mismatchProbability}%</span>
+                        <Badge variant="outline" className="text-sm">
+                          {mismatchProbability < 20 ? "Very Low" : mismatchProbability < 35 ? "Low" : "Moderate"}
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Match Breakdown */}
+          <Card className="border-2 shadow-xl">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl">Detailed Match Breakdown</CardTitle>
+            </CardHeader>
+            <CardContent className="p-8 space-y-8">
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-base">
+                    <span className="text-muted-foreground font-medium">Personality Alignment</span>
+                    <span className="font-bold text-lg">{personalityMatch}%</span>
                   </div>
-                  <Progress value={mismatchProbability} className="h-3" />
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-semibold">{mismatchProbability}%</span>
-                    <span className="text-muted-foreground">
-                      {mismatchProbability < 20 ? "Very Low" : mismatchProbability < 35 ? "Low" : "Moderate"}
-                    </span>
+                  <Progress value={personalityMatch} className="h-3" />
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-base">
+                    <span className="text-muted-foreground font-medium">Skills Compatibility</span>
+                    <span className="font-bold text-lg">{skillsMatch}%</span>
                   </div>
+                  <Progress value={skillsMatch} className="h-3" />
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-base">
+                    <span className="text-muted-foreground font-medium">Interests Match</span>
+                    <span className="font-bold text-lg">{interestsMatch}%</span>
+                  </div>
+                  <Progress value={interestsMatch} className="h-3" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Match Breakdown</CardTitle>
+          {/* Career Insights */}
+          <Card className="border-2 shadow-xl">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl flex items-center gap-2">
+                Career Fit Overview 
+                <Badge variant="outline" className="text-sm">AI-Powered Insights</Badge>
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Personality Match</span>
-                  <span className="font-semibold">{personalityMatch}%</span>
-                </div>
-                <Progress value={personalityMatch} className="h-2" />
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Skills Match</span>
-                  <span className="font-semibold">{skillsMatch}%</span>
-                </div>
-                <Progress value={skillsMatch} className="h-2" />
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Interests Match</span>
-                  <span className="font-semibold">{interestsMatch}%</span>
-                </div>
-                <Progress value={interestsMatch} className="h-2" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Career Fit Overview <span className="text-xs text-muted-foreground ml-2">(AI-powered)</span></CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm font-semibold mb-2">Industry Insights</p>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+            <CardContent className="p-8 space-y-8">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">Industry Insights & Trends</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
                   {industryTrends}
                 </p>
               </div>
               {metricsData?.careerFitAnalysis && (
-                <div className="pt-4 border-t">
-                  <p className="text-sm font-semibold mb-3">Why This Career Fits You</p>
-                  <ul className="space-y-2">
+                <div className="pt-6 border-t space-y-6">
+                  <h3 className="text-xl font-semibold">Why This Career Fits You</h3>
+                  <ul className="space-y-4">
                     {metricsData.careerFitAnalysis.split('\n').filter((line: string) => line.trim()).map((point: string, idx: number) => (
-                      <li key={idx} className="text-sm text-muted-foreground flex gap-2">
-                        <span className="text-primary font-semibold flex-shrink-0">•</span>
-                        <span>{point.trim().replace(/^[-•]\s*/, '')}</span>
+                      <li key={idx} className="text-base text-muted-foreground flex gap-4 items-start">
+                        <span className="text-primary text-lg font-semibold flex-shrink-0 mt-0.5">✦</span>
+                        <span className="leading-relaxed">{point.trim().replace(/^[-•]\s*/, '')}</span>
                       </li>
                     ))}
                   </ul>
@@ -336,14 +390,15 @@ export default function Results() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Required Skills</CardTitle>
+          {/* Required Skills */}
+          <Card className="border-2 shadow-xl">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl">Required Skills & Competencies</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
+            <CardContent className="p-8">
+              <div className="flex flex-wrap gap-4">
                 {career.requiredSkills.map((skill, idx) => (
-                  <Badge key={idx} variant="secondary">
+                  <Badge key={idx} variant="secondary" className="text-base px-4 py-2 border-2">
                     {skill}
                   </Badge>
                 ))}
@@ -351,40 +406,42 @@ export default function Results() {
             </CardContent>
           </Card>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-6">
             <Button 
               size="lg" 
-              className="flex-1" 
+              className="flex-1 h-14 text-lg font-semibold" 
               onClick={handleViewAR}
               data-testid="button-view-ar"
             >
-              View AR Preview
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <Eye className="mr-3 h-6 w-6" />
+              Experience AR Preview
+              <ArrowRight className="ml-3 h-6 w-6" />
             </Button>
             <Button 
               size="lg" 
               variant="outline" 
-              className="flex-1"
+              className="flex-1 h-14 text-lg font-semibold border-2"
               onClick={handleDownloadReport}
               data-testid="button-download-report"
             >
-              <Download className="mr-2 h-5 w-5" />
-              Download Report
+              <Download className="mr-3 h-6 w-6" />
+              Download Career Report
             </Button>
           </div>
 
           {/* Other Career Matches */}
           {matchResults.topMatches.length > 1 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Explore Other Career Matches</CardTitle>
+            <Card className="border-2 shadow-xl">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-2xl">Explore Other Career Matches</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {matchResults.topMatches.slice(1).map((match) => (
-                    <Card key={match.career.id} className="hover-elevate overflow-hidden flex flex-col">
+                    <Card key={match.career.id} className="hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 overflow-hidden flex flex-col">
                       {match.career.image && (
-                        <div className="w-full h-40 overflow-hidden">
+                        <div className="w-full h-48 overflow-hidden">
                           <img 
                             src={match.career.image} 
                             alt={match.career.title}
@@ -392,29 +449,29 @@ export default function Results() {
                           />
                         </div>
                       )}
-                      <CardContent className="pt-6 space-y-4 flex-1 flex flex-col">
-                        <div>
-                          <h3 className="text-lg font-semibold">{match.career.title}</h3>
-                          <p className="text-sm text-muted-foreground">{match.career.category}</p>
+                      <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
+                        <div className="space-y-3">
+                          <h3 className="text-xl font-bold">{match.career.title}</h3>
+                          <Badge variant="outline" className="w-fit">{match.career.category}</Badge>
                         </div>
                         
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs text-muted-foreground">Match Score</p>
-                            <p className="text-2xl font-bold text-primary">{match.matchScore}%</p>
+                            <p className="text-sm text-muted-foreground">Match Score</p>
+                            <p className="text-3xl font-bold text-primary">{match.matchScore}%</p>
                           </div>
                           <div className="text-right">
-                            <p className="text-xs text-muted-foreground">Salary</p>
-                            <p className="text-sm font-semibold">{formatSalary(match.career.salaryRange.min)}</p>
+                            <p className="text-sm text-muted-foreground">Salary Range</p>
+                            <p className="text-lg font-semibold">{formatSalary(match.career.salaryRange.min)}</p>
                           </div>
                         </div>
 
                         <Button 
                           onClick={() => handleTryCareer(match)}
-                          className="w-full mt-auto"
+                          className="w-full h-12 text-base font-semibold mt-auto"
                           data-testid={`button-try-career-${match.career.id}`}
                         >
-                          Try This Career
+                          Explore This Career
                         </Button>
                       </CardContent>
                     </Card>

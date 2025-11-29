@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Brain } from "lucide-react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { quizQuestions } from "@/lib/careerData";
@@ -38,10 +38,13 @@ export default function Quiz() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-lg text-muted-foreground">Loading...</p>
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/10 flex items-center justify-center p-8">
+        <div className="text-center space-y-6">
+          <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-primary mx-auto"></div>
+          <div className="space-y-2">
+            <p className="text-2xl font-semibold text-foreground">Loading Assessment</p>
+            <p className="text-lg text-muted-foreground">Checking your progress...</p>
+          </div>
         </div>
       </div>
     );
@@ -85,85 +88,106 @@ export default function Quiz() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="w-full border-b bg-background">
-        <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">DreamWeave</span>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/10 flex flex-col">
+      {/* Header */}
+      <header className="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
+        <div className="container mx-auto flex h-20 items-center justify-between px-8">
+          <div className="flex items-center gap-3">
+            <Sparkles className="h-8 w-8 text-primary" />
+            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              DreamWeave
+            </span>
           </div>
-          <div className="text-sm text-muted-foreground">
+          <div className="flex items-center gap-3 text-lg font-semibold text-muted-foreground">
+            <Brain className="h-6 w-6" />
             Career Discovery Quiz
           </div>
         </div>
       </header>
 
-      <div className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-2xl space-y-8">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
+      {/* Main Quiz Content */}
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="w-full max-w-4xl space-y-12">
+          {/* Progress Section */}
+          <div className="space-y-6">
+            <div className="flex items-center justify-between text-base font-medium text-muted-foreground">
               <span>Question {currentQuestion + 1} of {quizQuestions.length}</span>
               <span>{Math.round(progress)}% Complete</span>
             </div>
-            <Progress value={progress} className="h-1" data-testid="quiz-progress" />
+            <Progress value={progress} className="h-3" data-testid="quiz-progress" />
           </div>
 
-          <Card className="p-8 md:p-12">
-            <CardContent className="p-0 space-y-8">
-              <div className="space-y-4">
-                <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium uppercase tracking-wide">
+          {/* Question Card */}
+          <Card className="border-2 shadow-2xl">
+            <CardContent className="p-10 space-y-12">
+              {/* Question Header */}
+              <div className="space-y-6">
+                <div className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold uppercase tracking-wide border border-primary/20">
                   {question.category}
                 </div>
-                <h2 className="text-2xl md:text-3xl font-semibold leading-tight">
+                <h2 className="text-3xl md:text-4xl font-bold leading-tight tracking-tight">
                   {question.question}
                 </h2>
               </div>
 
+              {/* Options */}
               <div className="space-y-4">
                 {question.options.map((option) => (
                   <button
                     key={option.id}
                     onClick={() => handleSelectOption(option.id, option.value)}
-                    className={`w-full p-6 text-left rounded-lg border-2 transition-all ${
+                    className={`w-full p-8 text-left rounded-xl border-2 transition-all duration-300 ${
                       selectedOption === option.id
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover-elevate"
+                        ? "border-primary bg-primary/5 shadow-lg scale-105"
+                        : "border-border hover:shadow-lg hover:scale-102 hover:border-primary/30"
                     }`}
                     data-testid={`option-${option.id}`}
                   >
-                    <p className="text-base md:text-lg">{option.text}</p>
+                    <p className="text-lg md:text-xl leading-relaxed font-medium">{option.text}</p>
                   </button>
                 ))}
               </div>
 
-              <div className="flex gap-4 pt-4">
+              {/* Navigation Buttons */}
+              <div className="flex gap-6 pt-8">
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="lg"
                   onClick={handleBack}
-                  className="flex-1"
+                  className="flex-1 h-14 text-lg font-semibold border-2"
                   data-testid="button-back"
                 >
-                  <ArrowLeft className="mr-2 h-5 w-5" />
-                  Back
+                  <ArrowLeft className="mr-3 h-6 w-6" />
+                  {currentQuestion === 0 ? "Back to Home" : "Previous"}
                 </Button>
                 <Button
                   size="lg"
                   onClick={handleNext}
                   disabled={!selectedOption}
-                  className="flex-1"
+                  className="flex-1 h-14 text-lg font-semibold"
                   data-testid="button-next"
                 >
-                  {isLastQuestion ? "See Results" : "Next"}
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  {isLastQuestion ? "View Your Results" : "Next Question"}
+                  <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
               </div>
             </CardContent>
           </Card>
 
-          <p className="text-center text-sm text-muted-foreground">
-            Your responses help us match you with careers that align with your strengths and interests.
-          </p>
+          {/* Helper Text */}
+          <div className="text-center space-y-4">
+            <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+              Your honest responses help us match you with careers that truly align with your personality, 
+              strengths, and interests for long-term satisfaction.
+            </p>
+            <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+              <span>🎯 Personalized Matching</span>
+              <span>•</span>
+              <span>🔒 Private & Secure</span>
+              <span>•</span>
+              <span>⚡ 6-Minute Assessment</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
